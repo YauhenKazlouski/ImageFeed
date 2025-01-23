@@ -56,15 +56,31 @@
 		7C84EEFB2D4272650010ACD5 /* ImageFeed */ = {
 			isa = PBXGroup;
 			children = (
+				7C84EF112D42A1E30010ACD5 /* Presentation */,
+				7C84EF102D4294580010ACD5 /* Resources */,
 				7C84EEFC2D4272650010ACD5 /* AppDelegate.swift */,
 				7C84EEFE2D4272650010ACD5 /* SceneDelegate.swift */,
-				7C84EF002D4272650010ACD5 /* ViewController.swift */,
-				7C84EF022D4272650010ACD5 /* Main.storyboard */,
-				7C84EF052D4272670010ACD5 /* Assets.xcassets */,
-				7C84EF072D4272670010ACD5 /* LaunchScreen.storyboard */,
-				7C84EF0A2D4272670010ACD5 /* Info.plist */,
 			);
 			path = ImageFeed;
+			sourceTree = "<group>";
+		};
+		7C84EF102D4294580010ACD5 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7C84EF072D4272670010ACD5 /* LaunchScreen.storyboard */,
+				7C84EF0A2D4272670010ACD5 /* Info.plist */,
+				7C84EF052D4272670010ACD5 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		7C84EF112D42A1E30010ACD5 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				7C84EF002D4272650010ACD5 /* ViewController.swift */,
+				7C84EF022D4272650010ACD5 /* Main.storyboard */,
+			);
+			path = Presentation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,7 +310,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 56GBLT43X9;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ImageFeed/Info.plist;
+				INFOPLIST_FILE = ImageFeed/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -325,7 +341,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 56GBLT43X9;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ImageFeed/Info.plist;
+				INFOPLIST_FILE = ImageFeed/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
