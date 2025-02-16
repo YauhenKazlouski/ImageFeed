@@ -138,6 +138,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                 </subviews>
+                                <color key="backgroundColor" name="YP Background"/>
                                 <viewLayoutGuide key="contentLayoutGuide" id="vzz-Yc-ZU6"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="RzW-bM-vNR"/>
                                 <connections>
@@ -160,7 +161,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prB-ie-Zp2">
-                                <rect key="frame" x="274" y="751" width="51" height="51"/>
+                                <rect key="frame" x="171" y="751" width="51" height="51"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="51" id="cMJ-MC-iHI"/>
                                     <constraint firstAttribute="width" constant="51" id="g8e-kh-8l2"/>
@@ -180,9 +181,9 @@
                             <constraint firstItem="waO-oc-BY3" firstAttribute="trailing" secondItem="PFw-FH-Bam" secondAttribute="trailing" id="Ms8-4Q-d6p"/>
                             <constraint firstItem="waO-oc-BY3" firstAttribute="bottom" secondItem="pTP-qR-05z" secondAttribute="bottom" id="NsG-ep-L2y"/>
                             <constraint firstItem="PFw-FH-Bam" firstAttribute="leading" secondItem="waO-oc-BY3" secondAttribute="leading" id="eDS-wc-7NC"/>
+                            <constraint firstItem="prB-ie-Zp2" firstAttribute="centerX" secondItem="PFw-FH-Bam" secondAttribute="centerX" id="eXd-ST-Ifz"/>
                             <constraint firstAttribute="top" secondItem="waO-oc-BY3" secondAttribute="top" id="kQZ-6X-P2Q"/>
                             <constraint firstItem="vFc-XF-Itt" firstAttribute="leading" secondItem="PFw-FH-Bam" secondAttribute="leading" constant="9" id="lHB-QO-9bt"/>
-                            <constraint firstItem="PFw-FH-Bam" firstAttribute="trailing" secondItem="prB-ie-Zp2" secondAttribute="trailing" constant="68" id="sLg-et-amS"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="EC3-XF-pni"/>
@@ -203,7 +204,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="DGq-pE-hHc"/>
-                        <color key="backgroundColor" name="YP Black"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="tab_profile_active" id="fnk-f3-irH"/>
                 </viewController>
@@ -219,6 +219,9 @@
         <image name="sharing_button" width="51" height="51"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <image name="tab_profile_active" width="30" height="30"/>
+        <namedColor name="YP Background">
+            <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="YP Black">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
