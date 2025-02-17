@@ -12,7 +12,7 @@ final class ProfileViewController: UIViewController {
     
     
     private let userFotoImageView: UIImageView = {
-        let profileImage = UIImage(named: "photo")
+        let profileImage = UIImage(named: "Photo")
         let imageView = UIImageView(image: profileImage)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -47,7 +47,7 @@ final class ProfileViewController: UIViewController {
     
     private lazy var button: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "exit"), for: .normal)
+        button.setImage(UIImage(named: "Exit"), for: .normal)
         button.tintColor = .ypRed
         button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
