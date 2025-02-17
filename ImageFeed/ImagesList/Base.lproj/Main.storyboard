@@ -153,7 +153,7 @@
                                 </constraints>
                                 <color key="tintColor" name="YP White"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" image="backward">
+                                <state key="normal" image="Backward">
                                     <color key="titleColor" name="YP White"/>
                                 </state>
                                 <connections>
@@ -178,9 +178,9 @@
                         <constraints>
                             <constraint firstItem="vFc-XF-Itt" firstAttribute="top" secondItem="PFw-FH-Bam" secondAttribute="top" constant="9" id="5Wf-Ip-sdA"/>
                             <constraint firstItem="PFw-FH-Bam" firstAttribute="bottom" secondItem="prB-ie-Zp2" secondAttribute="bottom" constant="50" id="9tJ-fp-vLY"/>
-                            <constraint firstItem="waO-oc-BY3" firstAttribute="trailing" secondItem="PFw-FH-Bam" secondAttribute="trailing" id="Ms8-4Q-d6p"/>
+                            <constraint firstItem="waO-oc-BY3" firstAttribute="trailing" secondItem="pTP-qR-05z" secondAttribute="trailing" id="Ms8-4Q-d6p"/>
                             <constraint firstItem="waO-oc-BY3" firstAttribute="bottom" secondItem="pTP-qR-05z" secondAttribute="bottom" id="NsG-ep-L2y"/>
-                            <constraint firstItem="PFw-FH-Bam" firstAttribute="leading" secondItem="waO-oc-BY3" secondAttribute="leading" id="eDS-wc-7NC"/>
+                            <constraint firstAttribute="leading" secondItem="waO-oc-BY3" secondAttribute="leading" id="eDS-wc-7NC"/>
                             <constraint firstItem="prB-ie-Zp2" firstAttribute="centerX" secondItem="PFw-FH-Bam" secondAttribute="centerX" id="eXd-ST-Ifz"/>
                             <constraint firstAttribute="top" secondItem="waO-oc-BY3" secondAttribute="top" id="kQZ-6X-P2Q"/>
                             <constraint firstItem="vFc-XF-Itt" firstAttribute="leading" secondItem="PFw-FH-Bam" secondAttribute="leading" constant="9" id="lHB-QO-9bt"/>
@@ -214,7 +214,7 @@
     </scenes>
     <resources>
         <image name="0" width="1600" height="1059"/>
-        <image name="backward" width="24" height="24"/>
+        <image name="Backward" width="24" height="24"/>
         <image name="like_button_on" width="42" height="42"/>
         <image name="sharing_button" width="51" height="51"/>
         <image name="tab_editorial_active" width="30" height="30"/>
