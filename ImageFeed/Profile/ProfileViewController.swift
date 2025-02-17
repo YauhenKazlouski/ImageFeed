@@ -8,13 +8,10 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    private var label: UILabel?
-    
     
     private let userFotoImageView: UIImageView = {
         let profileImage = UIImage(named: "Photo")
         let imageView = UIImageView(image: profileImage)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -23,7 +20,6 @@ final class ProfileViewController: UIViewController {
         label.text = "Екатерина Новикова"
         label.textColor = .ypWhite
         label.font = .boldSystemFont(ofSize: 23)
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -32,7 +28,6 @@ final class ProfileViewController: UIViewController {
         label.text = "@ekaterina_nov"
         label.textColor = .ypGray
         label.font = .systemFont(ofSize: 13)
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -41,7 +36,6 @@ final class ProfileViewController: UIViewController {
         label.text = "Hello, world!"
         label.textColor = .ypWhite
         label.font = .systemFont(ofSize: 13)
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -50,7 +44,6 @@ final class ProfileViewController: UIViewController {
         button.setImage(UIImage(named: "Exit"), for: .normal)
         button.tintColor = .ypRed
         button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -65,15 +58,15 @@ final class ProfileViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = .ypBlack
         
-        view.addSubview(userFotoImageView)
-        view.addSubview(labelName)
-        view.addSubview(labelTag)
-        view.addSubview(labelStatus)
-        view.addSubview(button)
+        let elementsOnView = [userFotoImageView, labelName, labelTag, labelStatus, button]
+        elementsOnView.forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
     }
     
     @objc private func didTapButton() {
-        print("Exit")
+        // TODO: - Добавить логику при нажатии на кнопку
     }
 }
 
