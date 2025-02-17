@@ -180,7 +180,7 @@
                             <constraint firstItem="PFw-FH-Bam" firstAttribute="bottom" secondItem="prB-ie-Zp2" secondAttribute="bottom" constant="50" id="9tJ-fp-vLY"/>
                             <constraint firstItem="waO-oc-BY3" firstAttribute="trailing" secondItem="pTP-qR-05z" secondAttribute="trailing" id="Ms8-4Q-d6p"/>
                             <constraint firstItem="waO-oc-BY3" firstAttribute="bottom" secondItem="pTP-qR-05z" secondAttribute="bottom" id="NsG-ep-L2y"/>
-                            <constraint firstAttribute="leading" secondItem="waO-oc-BY3" secondAttribute="leading" id="eDS-wc-7NC"/>
+                            <constraint firstItem="PFw-FH-Bam" firstAttribute="leading" secondItem="waO-oc-BY3" secondAttribute="leading" constant="20" id="eDS-wc-7NC"/>
                             <constraint firstItem="prB-ie-Zp2" firstAttribute="centerX" secondItem="PFw-FH-Bam" secondAttribute="centerX" id="eXd-ST-Ifz"/>
                             <constraint firstAttribute="top" secondItem="waO-oc-BY3" secondAttribute="top" id="kQZ-6X-P2Q"/>
                             <constraint firstItem="vFc-XF-Itt" firstAttribute="leading" secondItem="PFw-FH-Bam" secondAttribute="leading" constant="9" id="lHB-QO-9bt"/>
