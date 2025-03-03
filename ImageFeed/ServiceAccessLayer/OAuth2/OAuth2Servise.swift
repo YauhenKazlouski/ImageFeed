@@ -53,62 +53,71 @@ final class OAuth2Servise {
     //MARK: - Fetch token
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
         guard let request = makeOAuthTokenRequest(code: code) else {
-            completion(.failure(NSError(domain: "RequestError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Невозможно создать запрос"])))
+            DispatchQueue.main.async {
+                completion(.failure(NSError(domain: "RequestError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Невозможно создать запрос"])))
+            }
             return
         }
         //сетевые ошибки:
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Сетевая ошибка: \(error.localizedDescription)")
-                
-                DispatchQueue.main.async {
-                    completion(.failure(error))
+        let task = URLSession.shared.data(for: request) { result in
+            switch result {
+            case .success(let data):
+                do {
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    
+                    let oAuthTokenResponseBody = try decoder.decode(OAuthTokenResponseBody.self, from: data)
+                    self.authToken = oAuthTokenResponseBody.accessToken
+                    
+                    OAuth2TokenStorage.shared.token = oAuthTokenResponseBody.accessToken
+                    
+                    DispatchQueue.main.async {
+                        completion(.success(oAuthTokenResponseBody.accessToken))
+                    }
+                } catch {
+                    print("Ошибка декодирования: \(error.localizedDescription)")
+                    
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                    }
                 }
-                return
-            }
-            
-         // ошибки статусов ответа
-            if let httpRespose = response as? HTTPURLResponse, httpRespose.statusCode >= 300 {
-                let statusError = NSError(domain: "HTTPError",
-                                          code: httpRespose.statusCode,
-                                          userInfo: [NSLocalizedDescriptionKey: "Ошибка сервера: \(httpRespose.statusCode)"])
-                print("Ошибка сервера: \(httpRespose.statusCode)")
                 
-                DispatchQueue.main.async {
-                    completion(.failure(statusError))
-                }
-                return
-            }
-            
-            guard let data else {
-                let noDataError = NSError(domain: "No data",
-                                          code: -1,
-                                          userInfo: [NSLocalizedDescriptionKey: "Нет данных в ответе"])
-                print("Ошибка: Нет данных в ответе")
-                
-                DispatchQueue.main.async {
-                    completion(.failure(noDataError))
-                }
-                return
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                
-                let oAuthTokenResponseBody = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                self.authToken = oAuthTokenResponseBody.accessToken
-                
-                OAuth2TokenStorage.shared.token = oAuthTokenResponseBody.accessToken
-                
-                DispatchQueue.main.async {
-                    completion(.success(oAuthTokenResponseBody.accessToken))
-                }
-            } catch {
-                print("Ошибка декодирования: \(error.localizedDescription)")
-                
-                DispatchQueue.main.async {
-                    completion(.failure(error))
+            case .failure(let error):
+                if let networkError = error as? NetworkError {
+                    switch networkError {
+                    case .httpStatusCode(let statusCode):
+                        let statusError = NSError(domain: "HTTPError",
+                                                  code: statusCode,
+                                                  userInfo: [NSLocalizedDescriptionKey: "Ошибка сервера: \(statusCode)"])
+                        print("Ошибка сервера: \(statusCode)")
+                        
+                        DispatchQueue.main.async {
+                            completion(.failure(statusError))
+                        }
+                        
+                    case .urlRequestError(let requestError):
+                        print("Сетевая ошибка: \(requestError.localizedDescription)")
+                        
+                        DispatchQueue.main.async {
+                            completion(.failure(requestError))
+                        }
+                        
+                    case .urlSessionError:
+                        let noDataError = NSError(domain: "No data",
+                                                  code: -1,
+                                                  userInfo: [NSLocalizedDescriptionKey: "Нет данных в ответе"])
+                        print("Ошибка: Нет данных в ответе")
+                        
+                        DispatchQueue.main.async {
+                            completion(.failure(noDataError))
+                        }
+                    }
+                } else {
+                    print("Неизвестная ошибка: \(error.localizedDescription)")
+                    
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                    }
                 }
             }
         }

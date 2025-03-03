@@ -32,10 +32,12 @@ final class AuthViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == ShowWebViewSegueIdentifier {
-            guard
-                let webViewViewController = segue.destination as? WebViewViewController
-            else { fatalError("Failed to prepare for \(ShowWebViewSegueIdentifier)") }
-            webViewViewController.delegate = self
+            if let webViewViewController = segue.destination as? WebViewViewController {
+                webViewViewController.delegate = self
+            } else {
+                print("Ошибка: не удалось привести segue.destination к типу WebViewViewController")
+                navigationController?.popViewController(animated: true)
+            }
         } else {
             super.prepare(for: segue, sender: sender)
         }
@@ -44,8 +46,7 @@ final class AuthViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = .ypBlack
         
-        let elementsOnView = [logoImageView, loginButton]
-        elementsOnView.forEach {
+        [logoImageView, loginButton].forEach {
             $0?.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0!)
         }
@@ -80,6 +81,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
                 
                 DispatchQueue.main.async {
                     self.delegate?.authViewController(self, didAuthenticateWithCode: code)
+                    self.dismiss(animated: true)
                 }
                 
             case .failure(let error):
