@@ -17,8 +17,21 @@
                     <view key="view" contentMode="scaleToFill" id="pRp-dA-OGt">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Vector" translatesAutoresizingMaskIntoConstraints="NO" id="NWq-Xb-Y8r">
+                                <rect key="frame" x="159" y="399.66666666666669" width="75" height="78"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="75" id="DAg-Gy-9Rx"/>
+                                    <constraint firstAttribute="height" constant="78" id="djw-gi-mcH"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="M4x-yY-CzG"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="YP Black"/>
+                        <constraints>
+                            <constraint firstItem="NWq-Xb-Y8r" firstAttribute="centerX" secondItem="M4x-yY-CzG" secondAttribute="centerX" id="82Z-fa-cfD"/>
+                            <constraint firstItem="NWq-Xb-Y8r" firstAttribute="centerY" secondItem="M4x-yY-CzG" secondAttribute="centerY" id="kW7-XW-Mfs"/>
+                        </constraints>
                     </view>
                     <connections>
                         <segue destination="3j1-g0-Pbh" kind="presentation" identifier="ShowAuthenticationScreen" modalPresentationStyle="fullScreen" id="8eG-aM-gPB"/>
@@ -31,7 +44,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="9Pe-lR-VY3">
             <objects>
-                <tabBarController id="XyQ-Nd-UdF" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarViewController" id="XyQ-Nd-UdF" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Sno-Jd-8Be">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -298,6 +311,7 @@
     </scenes>
     <resources>
         <image name="0" width="1600" height="1059"/>
+        <image name="Vector" width="75" height="78"/>
         <image name="like_button_on" width="42" height="42"/>
         <image name="nav_back_button" width="24" height="24"/>
         <image name="sharing_button" width="51" height="51"/>
