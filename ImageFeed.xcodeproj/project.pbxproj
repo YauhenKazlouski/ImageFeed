@@ -61,6 +61,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		27D464DA2D75AF0C0057C65F /* OAuth2 */ = {
+			isa = PBXGroup;
+			children = (
+				27DA5DD12D74A4C100D8D997 /* OAuth2Servise.swift */,
+				27DA5DD32D74B34900D8D997 /* OAuth2TokenStorage.swift */,
+			);
+			path = OAuth2;
+			sourceTree = "<group>";
+		};
 		27DA5DC42D5E30EC00D8D997 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -105,8 +114,7 @@
 		27DA5DE12D74D9ED00D8D997 /* ServiceAccessLayer */ = {
 			isa = PBXGroup;
 			children = (
-				27DA5DD12D74A4C100D8D997 /* OAuth2Servise.swift */,
-				27DA5DD32D74B34900D8D997 /* OAuth2TokenStorage.swift */,
+				27D464DA2D75AF0C0057C65F /* OAuth2 */,
 			);
 			path = ServiceAccessLayer;
 			sourceTree = "<group>";
