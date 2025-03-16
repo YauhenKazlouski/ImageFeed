@@ -9,13 +9,15 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     
+    private let profileService = ProfileService.shared
+    
     private let userFotoImageView: UIImageView = {
         let profileImage = UIImage(named: "Photo")
         let imageView = UIImageView(image: profileImage)
         return imageView
     }()
     
-    private let labelName: UILabel = {
+    private let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Екатерина Новикова"
         label.textColor = .ypWhite
@@ -23,7 +25,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private let labelTag: UILabel = {
+    private let loginNameLabel: UILabel = {
         let label = UILabel()
         label.text = "@ekaterina_nov"
         label.textColor = .ypGray
@@ -31,7 +33,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private let labelStatus: UILabel = {
+    private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "Hello, world!"
         label.textColor = .ypWhite
@@ -52,16 +54,24 @@ final class ProfileViewController: UIViewController {
         
         setupView()
         setConstraints()
-        
+        updateProfileDetails()
     }
     
     private func setupView() {
         view.backgroundColor = .ypBlack
         
-        let elementsOnView = [userFotoImageView, labelName, labelTag, labelStatus, button]
+        let elementsOnView = [userFotoImageView, nameLabel, loginNameLabel, descriptionLabel, button]
         elementsOnView.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
+        }
+    }
+    
+    private func updateProfileDetails() {
+        if let profile = profileService.profile {
+            nameLabel.text = profile.name
+            loginNameLabel.text = profile.loginName
+            descriptionLabel.text = profile.bio
         }
     }
     
@@ -78,14 +88,14 @@ extension ProfileViewController {
             userFotoImageView.widthAnchor.constraint(equalToConstant: 70),
             userFotoImageView.heightAnchor.constraint(equalToConstant: 70),
             
-            labelName.leadingAnchor.constraint(equalTo: userFotoImageView.leadingAnchor),
-            labelName.topAnchor.constraint(equalTo: userFotoImageView.bottomAnchor, constant: 8),
+            nameLabel.leadingAnchor.constraint(equalTo: userFotoImageView.leadingAnchor),
+            nameLabel.topAnchor.constraint(equalTo: userFotoImageView.bottomAnchor, constant: 8),
             
-            labelTag.leadingAnchor.constraint(equalTo: userFotoImageView.leadingAnchor),
-            labelTag.topAnchor.constraint(equalTo: labelName.bottomAnchor, constant: 8),
+            loginNameLabel.leadingAnchor.constraint(equalTo: userFotoImageView.leadingAnchor),
+            loginNameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
             
-            labelStatus.leadingAnchor.constraint(equalTo: userFotoImageView.leadingAnchor),
-            labelStatus.topAnchor.constraint(equalTo: labelTag.bottomAnchor, constant: 8),
+            descriptionLabel.leadingAnchor.constraint(equalTo: userFotoImageView.leadingAnchor),
+            descriptionLabel.topAnchor.constraint(equalTo: loginNameLabel.bottomAnchor, constant: 8),
             
             button.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -24),
             button.centerYAnchor.constraint(equalTo: userFotoImageView.centerYAnchor)

@@ -12,12 +12,13 @@ final class SplashViewController: UIViewController {
     
     private let oauth2Service = OAuth2Servise.shared
     private let oauth2TokenStorage = OAuth2TokenStorage.shared
+    private let profileService = ProfileService.shared
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         if oauth2TokenStorage.token != nil {
-            switchToTabBarController()
+            fetchProfile()
         } else {
             
             performSegue(withIdentifier: ShowAuthenticationScreenSegueIdentifier, sender: nil)
@@ -38,6 +39,22 @@ final class SplashViewController: UIViewController {
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
             .instantiateViewController(withIdentifier: "TabBarViewController")
         window.rootViewController = tabBarController
+    }
+    
+    private func fetchProfile() {
+        profileService.fetchProfile { [weak self] result in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self.switchToTabBarController()
+                case .failure:
+                    // TODO: Обработка ошибки загрузки профиля
+                    print("Ошибка загрузки профиля")
+                }
+            }
+        }
     }
 }
 
@@ -60,17 +77,18 @@ extension SplashViewController {
 
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        dismiss(animated: true) {
+        dismiss(animated: true) { [weak self] in
+            guard let self else { return }
             self.fetchOAuthToken(code)
         }
     }
     
     private func fetchOAuthToken(_ code: String) {
         oauth2Service.fetchOAuthToken(code) { [weak self] result in
-            guard let self = self else { return }
+            guard let self else { return }
             switch result {
             case .success:
-                self.switchToTabBarController()
+                self.fetchProfile()
             case .failure:
                 // TODO [Sprint 11]
                 break
