@@ -42,12 +42,18 @@ final class SplashViewController: UIViewController {
     }
     
     private func fetchProfile() {
+        UIBlocingProgressHUD.show()
+        
         profileService.fetchProfile { [weak self] result in
+            UIBlocingProgressHUD.dismiss()
+            
             guard let self = self else { return }
             
             DispatchQueue.main.async {
                 switch result {
-                case .success:
+                case .success(let profile):
+                    let username = profile.username
+                    ProfileImageService.shared.fetchProfileImageURL(username: username) { _ in }
                     self.switchToTabBarController()
                 case .failure:
                     // TODO: Обработка ошибки загрузки профиля

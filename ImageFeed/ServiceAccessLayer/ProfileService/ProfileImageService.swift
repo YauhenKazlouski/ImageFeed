@@ -31,6 +31,7 @@ final class ProfileImageService {
     private (set) var avatarURL: String?
     private var isFetching: Bool = false
     private var task: URLSessionTask?
+    static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     
     private func makeProfileImageRequest(username: String, token: String) -> URLRequest? {
         let urlString = "https://api.unsplash.com/users/\(username)"
@@ -83,6 +84,12 @@ final class ProfileImageService {
                             completion(.failure(AuthServiceError.noData))
                             return
                         }
+                        
+                        NotificationCenter.default
+                            .post(
+                                name: ProfileImageService.didChangeNotification,
+                                object: self,
+                                userInfo: ["URL" : profileImageURL])
                         
                         self.avatarURL = profileImageURL
                         completion(.success(profileImageURL))
