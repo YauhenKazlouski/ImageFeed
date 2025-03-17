@@ -9,34 +9,17 @@ import Foundation
 
 struct ProfileResult: Codable {
     let username: String
-    let firstName: String
-    let lastName: String
+    let firstName: String?
+    let lastName: String?
     let bio: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case username
-        case firstName = "first_name"
-        case lastName = "last_name"
-        case bio = "bio"
-    }
 }
 
 struct Profile {
     let username: String
-    let firstName: String
-    let lastName: String
     let name: String
     let loginName: String
     let bio: String?
     
-    init(from profileResult: ProfileResult) {
-        self.username = profileResult.username
-        self.firstName = profileResult.firstName
-        self.lastName = profileResult.lastName
-        self.name = "\(profileResult.firstName) \(profileResult.lastName)"
-        self.loginName = "@\(profileResult.username)"
-        self.bio = profileResult.bio
-    }
 }
 
 final class ProfileService {
@@ -83,24 +66,21 @@ final class ProfileService {
         isFetching = true
         task?.cancel()
         
-        let task = URLSession.shared.data(for: request) { [weak self] result in
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             DispatchQueue.main.async {
-                guard let self else { return }
+                guard let self = self else { return }
                 self.isFetching = false
                 
                 switch result {
-                case .success(let data):
-                    do {
-                        let decoder = JSONDecoder()
-                        let profileResult = try decoder.decode(ProfileResult.self, from: data)
-                        let profile = Profile(from: profileResult)
-                        self.profile = profile
-                        
-                        completion(.success(profile))
-                    } catch {
-                        print("Ошибка декодирования: \(error.localizedDescription)")
-                        completion(.failure(error))
-                    }
+                case .success(let profileResult):
+                    let profile = Profile(
+                        username: profileResult.username,
+                        name: "\(profileResult.firstName ?? "") \(profileResult.lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines),
+                        loginName: "@\(profileResult.username)",
+                        bio: profileResult.bio)
+                    
+                    self.profile = profile
+                    completion(.success(profile))
                     
                 case .failure(let error):
                     print("Ошибка: \(error.localizedDescription)")

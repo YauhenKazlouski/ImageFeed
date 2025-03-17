@@ -70,33 +70,27 @@ final class ProfileImageService {
         isFetching = true
         task?.cancel()
         
-        let task = URLSession.shared.data(for: request) { [weak self] result in
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             DispatchQueue.main.async {
-                guard let self else { return }
+                guard let self = self else { return }
                 self.isFetching = false
                 
                 switch result {
-                case .success(let data):
-                    do {
-                        let decoder = JSONDecoder()
-                        let userResult = try decoder.decode(UserResult.self, from: data)
-                        guard let profileImageURL = userResult.profileImage?.small else {
-                            completion(.failure(AuthServiceError.noData))
-                            return
-                        }
-                        
-                        NotificationCenter.default
-                            .post(
-                                name: ProfileImageService.didChangeNotification,
-                                object: self,
-                                userInfo: ["URL" : profileImageURL])
-                        
-                        self.avatarURL = profileImageURL
-                        completion(.success(profileImageURL))
-                    } catch {
-                        print("Ошибка декодирования: \(error.localizedDescription)")
-                        completion(.failure(NetworkError.urlRequestError(error)))
+                case .success(let userResult):
+                    guard let profileImageURL = userResult.profileImage?.small else {
+                        completion(.failure(AuthServiceError.noData))
+                        return
                     }
+                    
+                    NotificationCenter.default
+                        .post(
+                            name: ProfileImageService.didChangeNotification,
+                            object: self,
+                            userInfo: ["URL": profileImageURL])
+                    
+                    self.avatarURL = profileImageURL
+                    completion(.success(profileImageURL))
+                    
                 case .failure(let error):
                     print("Ошибка: \(error.localizedDescription)")
                     completion(.failure(error))

@@ -80,24 +80,15 @@ final class OAuth2Servise {
             }
             return
         }
-        
-        let task = URLSession.shared.data(for: request) { [weak self] result in
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             DispatchQueue.main.async {
-                guard let self else { return }
-                
+                guard let self = self else { return }
                 switch result {
-                case .success(let data):
-                    do {
-                        let decoder = JSONDecoder()
-                        decoder.keyDecodingStrategy = .convertFromSnakeCase
-                        let oAuthTokenResponseBody = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                        self.authToken = oAuthTokenResponseBody.accessToken
-                        OAuth2TokenStorage.shared.token = oAuthTokenResponseBody.accessToken
-                        completion(.success(oAuthTokenResponseBody.accessToken))
-                    } catch {
-                        print("Ошибка декодирования: \(error.localizedDescription)")
-                        completion(.failure(error))
-                    }
+                case .success(let oAuthTokenResponseBody):
+                    
+                    self.authToken = oAuthTokenResponseBody.accessToken
+                    OAuth2TokenStorage.shared.token = oAuthTokenResponseBody.accessToken
+                    completion(.success(oAuthTokenResponseBody.accessToken))
                     
                 case .failure(let error):
                     print("Ошибка: \(error.localizedDescription)")
