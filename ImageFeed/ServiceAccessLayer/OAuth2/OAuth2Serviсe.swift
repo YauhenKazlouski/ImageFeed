@@ -24,6 +24,7 @@ enum AuthServiceError: Error {
     case httpError(Int)
     case noData
     case decodingError(Error)
+    case missingToken
 }
 
 final class OAuth2Servise {
