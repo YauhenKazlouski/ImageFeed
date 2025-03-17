@@ -19,7 +19,6 @@ struct Profile {
     let name: String
     let loginName: String
     let bio: String?
-    
 }
 
 final class ProfileService {
@@ -33,7 +32,7 @@ final class ProfileService {
     
     func makeProfileRequest(token: String) -> URLRequest? {
         guard let url = URL(string: "https://api.unsplash.com/me") else {
-            print("Ошибка: неверный URL")
+            print("[makeProfileRequest]: InvalidURL - неверный URL")
             return nil
         }
         
@@ -46,17 +45,18 @@ final class ProfileService {
     
     func fetchProfile(completion: @escaping (Result<Profile, Error>) -> Void) {
         guard !isFetching else {
-            print("Предупреждение: запрос уже выполняется")
+            print("[fetchProfile]: FetchingInProgress - запрос уже выполняется")
             return
         }
         
         guard let token = oAuthTokenStorage.token else {
-            print("Ошибка: Токен отсутствует")
+            print("[fetchProfile]: MissingToken - токен отсутствует")
             completion(.failure(AuthServiceError.missingToken))
             return
         }
         
         guard let request = makeProfileRequest(token: token) else {
+            print("[fetchProfile]: InvalidRequest - не удалось создать URLRequest")
             DispatchQueue.main.async {
                 completion(.failure(AuthServiceError.invalidRequest))
             }
@@ -83,7 +83,7 @@ final class ProfileService {
                     completion(.success(profile))
                     
                 case .failure(let error):
-                    print("Ошибка: \(error.localizedDescription)")
+                    print("[fetchProfile]: \(error.errorDescription())")
                     completion(.failure(error))
                 }
             }

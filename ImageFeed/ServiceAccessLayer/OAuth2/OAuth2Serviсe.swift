@@ -67,6 +67,7 @@ final class OAuth2Servise {
         assert(Thread.isMainThread)
         
         guard lastCode != code else {
+            print("[fetchOAuthToken]: InvalidRequest - код уже использовался")
             completion(.failure(AuthServiceError.invalidRequest))
             return
         }
@@ -75,6 +76,7 @@ final class OAuth2Servise {
         lastCode = code
         
         guard let request = makeOAuthTokenRequest(code: code) else {
+            print("[fetchOAuthToken]: InvalidRequest - не удалось создать URLRequest")
             DispatchQueue.main.async {
                 completion(.failure(AuthServiceError.invalidRequest))
             }
@@ -91,7 +93,7 @@ final class OAuth2Servise {
                     completion(.success(oAuthTokenResponseBody.accessToken))
                     
                 case .failure(let error):
-                    print("Ошибка: \(error.localizedDescription)")
+                    print("[fetchOAuthToken]: \(error.errorDescription())")
                     completion(.failure(error))
                 }
             }

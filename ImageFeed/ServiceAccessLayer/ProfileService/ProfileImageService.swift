@@ -37,7 +37,7 @@ final class ProfileImageService {
         let urlString = "https://api.unsplash.com/users/\(username)"
         
         guard let url = URL(string: urlString) else {
-            print("Ошибка: неверный URL")
+            print("[makeProfileImageRequest]: InvalidURL - неверный URL")
             return nil
         }
         
@@ -50,17 +50,18 @@ final class ProfileImageService {
     
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
         guard !isFetching else {
-            print("Предупреждение: запрос уже выполняется")
+            print("[fetchProfileImageURL]: FetchingInProgress - запрос уже выполняется")
             return
         }
         
         guard let token = oAuth2TokenStorage.token else {
-            print("Ошибка: токен отсутствует")
+            print("[fetchProfileImageURL]: MissingToken - токен отсутствует")
             completion(.failure(AuthServiceError.missingToken))
             return
         }
         
         guard let request = makeProfileImageRequest(username: username, token: token) else {
+            print("[fetchProfileImageURL]: InvalidRequest - не удалось создать URLRequest")
             DispatchQueue.main.async {
                 completion(.failure(AuthServiceError.invalidRequest))
             }
@@ -78,6 +79,7 @@ final class ProfileImageService {
                 switch result {
                 case .success(let userResult):
                     guard let profileImageURL = userResult.profileImage?.small else {
+                        print("[fetchProfileImageURL]: NoData - отсутствует URL аватара")
                         completion(.failure(AuthServiceError.noData))
                         return
                     }
@@ -92,7 +94,7 @@ final class ProfileImageService {
                     completion(.success(profileImageURL))
                     
                 case .failure(let error):
-                    print("Ошибка: \(error.localizedDescription)")
+                    print("[fetchProfileImageURL]: \(error.errorDescription())")
                     completion(.failure(error))
                 }
             }
