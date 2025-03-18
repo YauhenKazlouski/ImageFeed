@@ -94,7 +94,7 @@ final class ProfileViewController: UIViewController {
             
             self.userFotoImageView.kf.setImage(
                 with: url,
-                placeholder: UIImage(named: "Photo"),
+                placeholder: UIImage(named: "placeholder"),
                 options: [
                     .transition(.fade(0.2)),
                     .processor(DownsamplingImageProcessor(size: CGSize(width: 140, height: 140)))
