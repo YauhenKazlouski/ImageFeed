@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
@@ -14,6 +15,8 @@ final class ProfileViewController: UIViewController {
     private let userFotoImageView: UIImageView = {
         let profileImage = UIImage(named: "Photo")
         let imageView = UIImageView(image: profileImage)
+        imageView.layer.cornerRadius = 35
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -72,6 +75,38 @@ final class ProfileViewController: UIViewController {
             nameLabel.text = profile.name
             loginNameLabel.text = profile.loginName
             descriptionLabel.text = profile.bio
+        }
+        
+        updateUserFoto()
+    }
+    
+   
+    
+    private func updateUserFoto() {
+        DispatchQueue.main.async {
+            guard
+                let profileImageURL = ProfileImageService.shared.avatarURL,
+                let url = URL(string: profileImageURL)
+            else {
+                print("[updateUserFotoImageView]: Картинка профиля не найдена или URL невалиден")
+                return
+            }
+            
+            self.userFotoImageView.kf.setImage(
+                with: url,
+                placeholder: UIImage(named: "Photo"),
+                options: [
+                    .transition(.fade(0.2)),
+                    .processor(DownsamplingImageProcessor(size: CGSize(width: 140, height: 140)))
+                ]
+            ) { result in
+                switch result {
+                case .success(let value):
+                    print("[updateUserFotoImageView]: Изображение успешно загружено: \(value.source.url?.absoluteString ?? "")")
+                case .failure(let error):
+                    print("[updateUserFotoImageView]: Ошибка загрузки изображения: \(error.localizedDescription)")
+                }
+            }
         }
     }
     

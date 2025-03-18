@@ -10,18 +10,12 @@ import Foundation
 struct UserResult: Codable {
     let profileImage: ProfileImage?
     
-    enum CodingKeys: String, CodingKey {
-        case profileImage = "profile_image"
-    }
-    
     struct ProfileImage: Codable {
-        let small: String
-        let medium: String
-        let large: String
+        let small: String?
+        let medium: String?
+        let large: String?
     }
 }
-
-
 
 final class ProfileImageService {
     static let shared = ProfileImageService()
@@ -78,20 +72,21 @@ final class ProfileImageService {
                 
                 switch result {
                 case .success(let userResult):
-                    guard let profileImageURL = userResult.profileImage?.small else {
+
+                    guard let profileImageURL = userResult.profileImage?.large else {
                         print("[fetchProfileImageURL]: NoData - отсутствует URL аватара")
                         completion(.failure(AuthServiceError.noData))
                         return
                     }
+                    
+                    self.avatarURL = profileImageURL
+                    completion(.success(profileImageURL))
                     
                     NotificationCenter.default
                         .post(
                             name: ProfileImageService.didChangeNotification,
                             object: self,
                             userInfo: ["URL": profileImageURL])
-                    
-                    self.avatarURL = profileImageURL
-                    completion(.success(profileImageURL))
                     
                 case .failure(let error):
                     print("[fetchProfileImageURL]: \(error.errorDescription())")

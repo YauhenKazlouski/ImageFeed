@@ -41,10 +41,6 @@ extension URLSession {
         return task
     }
     
-    
-}
-
-extension URLSession {
     func objectTask<T: Decodable>(
         for request: URLRequest,
         complition: @escaping (Result<T, Error>) -> Void
@@ -70,4 +66,5 @@ extension URLSession {
         return task
     }
 }
+
 
