@@ -35,7 +35,7 @@ final class AuthViewController: UIViewController {
             if let webViewViewController = segue.destination as? WebViewViewController {
                 webViewViewController.delegate = self
             } else {
-                print("Ошибка: не удалось привести segue.destination к типу WebViewViewController")
+                print("[prepare]: Ошибка не удалось привести segue.destination к типу WebViewViewController")
                 navigationController?.popViewController(animated: true)
             }
         } else {
@@ -89,13 +89,22 @@ extension AuthViewController: WebViewViewControllerDelegate {
                 self.dismiss(animated: true)
                 
             case .failure(let error):
-                print("Ошибка получения токена: \(error)")
+                print("[webViewViewController]: Ошибка авторизации: \(error.localizedDescription)")
+                self.showErrorAlert(message: "Не удалось войти в систему")
             }
         }
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         dismiss(animated: true)
+    }
+    
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "Что-то пошло не так", message: message, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Ок", style: .default))
+        
+        self.present(alert, animated: true, completion: nil)
     }
 }
 
