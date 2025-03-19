@@ -37,7 +37,6 @@ final class SplashViewController: UIViewController {
             fetchProfile()
         } else {
             
-//            performSegue(withIdentifier: ShowAuthenticationScreenSegueIdentifier, sender: nil)
             let authViewController = AuthViewController()
             authViewController.delegate = self
             authViewController.modalPresentationStyle = .fullScreen
@@ -84,22 +83,6 @@ final class SplashViewController: UIViewController {
     }
 }
 
-//extension SplashViewController {
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == ShowAuthenticationScreenSegueIdentifier {
-//            guard
-//                let navigationController = segue.destination as? UINavigationController,
-//                let viewController = navigationController.viewControllers[0] as? AuthViewController
-//            else {
-//                print("Failed to prepare for \(ShowAuthenticationScreenSegueIdentifier)")
-//                return
-//            }
-//            viewController.delegate = self
-//        } else {
-//            super.prepare(for: segue, sender: sender)
-//        }
-//    }
-//}
 
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {

@@ -84,10 +84,7 @@ final class OAuth2Servise {
         }
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             DispatchQueue.main.async {
-                guard let self = self else { return }
-                
-                self.task = nil
-                self.lastCode = nil
+                guard let self else { return }
                 
                 switch result {
                 case .success(let oAuthTokenResponseBody):
@@ -100,6 +97,9 @@ final class OAuth2Servise {
                     print("[fetchOAuthToken]: \(error.errorDescription())")
                     completion(.failure(error))
                 }
+                
+                self.task = nil
+                self.lastCode = nil
             }
         }
         
