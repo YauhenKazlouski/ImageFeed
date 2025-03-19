@@ -14,9 +14,10 @@ enum WebViewConstants {
 
 final class WebViewViewController: UIViewController {
     
+    weak var delegate: WebViewViewControllerDelegate?
+    
     private let webView: WKWebView = {
-        let webConfiguration = WKWebViewConfiguration()
-        let webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        let webView = WKWebView()
         webView.backgroundColor = .ypWhite
         return webView
     }()
@@ -28,9 +29,16 @@ final class WebViewViewController: UIViewController {
         return progress
     }()
     
-    private var estimatedProgressObservarion: NSKeyValueObservation?
+    private lazy var backButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(named: "nav_back_button"), for: .normal)
+        button.tintColor = .ypBlack
+        button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+        
+        return button
+    }()
     
-    weak var delegate: WebViewViewControllerDelegate?
+    private var estimatedProgressObservation: NSKeyValueObservation?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +55,7 @@ final class WebViewViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        estimatedProgressObservarion = webView.observe(
+        estimatedProgressObservation = webView.observe(
             \.estimatedProgress,
              options: [],
              changeHandler: { [weak self] _, _ in
@@ -56,8 +64,12 @@ final class WebViewViewController: UIViewController {
              })
     }
     
+    deinit {
+        estimatedProgressObservation?.invalidate()
+    }
+    
     private func setupView() {
-        let elementsOnView = [webView, progressView]
+        let elementsOnView = [webView, progressView, backButton]
         
         elementsOnView.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -67,6 +79,7 @@ final class WebViewViewController: UIViewController {
     
     private func loadAuthView() {
         guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizeURLString) else {
+            print("[loadAuthView]: Невозможно создать URLComponents")
             return
         }
         
@@ -78,6 +91,7 @@ final class WebViewViewController: UIViewController {
         ]
         
         guard let url = urlComponents.url else {
+            print("[loadAuthView]: Невозможно создать URL")
             return
         }
         
@@ -89,20 +103,27 @@ final class WebViewViewController: UIViewController {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
+    
+    @objc private func didTapBackButton() {
+        delegate?.webViewViewControllerDidCancel(self)
+    }
 }
 
 //MARK: - Constraints
 extension WebViewViewController {
     private func setConstraints() {
         NSLayoutConstraint.activate([
+            progressView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            progressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            progressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            
             webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            progressView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            progressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            progressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 }

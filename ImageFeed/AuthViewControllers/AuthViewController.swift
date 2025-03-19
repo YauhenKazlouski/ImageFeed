@@ -18,54 +18,42 @@ final class AuthViewController: UIViewController {
         let logoView = UIImageView(image: logoImage)
         return logoView
     }()
-    
-    @IBOutlet weak var loginButton: UIButton!
+       
+    private lazy var loginButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Войти", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        button.tintColor = .ypBlack
+        button.backgroundColor = .ypWhite
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 16
+        button.clipsToBounds = true
+        button.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
         setConstraints()
-        configureBackButton()
-        configureLoginButton()
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == ShowWebViewSegueIdentifier {
-            if let webViewViewController = segue.destination as? WebViewViewController {
-                webViewViewController.delegate = self
-            } else {
-                print("[prepare]: Ошибка не удалось привести segue.destination к типу WebViewViewController")
-                navigationController?.popViewController(animated: true)
-            }
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
     }
     
     private func setupView() {
         view.backgroundColor = .ypBlack
         
         [logoImageView, loginButton].forEach {
-            $0?.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview($0!)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
         }
     }
     
-    private func configureBackButton() {
-        navigationController?.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
-        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "nav_back_button")
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationItem.backBarButtonItem?.tintColor = .ypBlack
-    }
-    
-    private func configureLoginButton() {
-        loginButton.setTitle("Войти", for: .normal)
-        loginButton.titleLabel?.font = .systemFont(ofSize: 17)
-        loginButton.tintColor = .ypBlack
-        loginButton.backgroundColor = .ypWhite
-        loginButton.layer.cornerRadius = 16
-        loginButton.layer.masksToBounds = true
+    @objc private func didTapLoginButton() {
+        let webVC = WebViewViewController()
+        webVC.delegate = self
+        let navigationController = UINavigationController(rootViewController: webVC)
+        navigationController.modalPresentationStyle = .fullScreen
+        present(navigationController, animated: true, completion: nil)
     }
 }
 

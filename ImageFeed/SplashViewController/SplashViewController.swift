@@ -14,6 +14,22 @@ final class SplashViewController: UIViewController {
     private let oauth2TokenStorage = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
     
+    private let splashImageView: UIImageView = {
+        let splashImage = UIImage(named: "Vector")
+        let imageView = UIImageView(image: splashImage)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .ypBlack
+        
+        view.addSubview(splashImageView)
+        setConstraints()
+        
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -21,7 +37,11 @@ final class SplashViewController: UIViewController {
             fetchProfile()
         } else {
             
-            performSegue(withIdentifier: ShowAuthenticationScreenSegueIdentifier, sender: nil)
+//            performSegue(withIdentifier: ShowAuthenticationScreenSegueIdentifier, sender: nil)
+            let authViewController = AuthViewController()
+            authViewController.delegate = self
+            authViewController.modalPresentationStyle = .fullScreen
+            present(authViewController, animated: true, completion: nil)
         }
     }
     
@@ -36,8 +56,8 @@ final class SplashViewController: UIViewController {
     
     private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-        let tabBarController = UIStoryboard(name: "Main", bundle: .main)
-            .instantiateViewController(withIdentifier: "TabBarViewController")
+
+        let tabBarController = TabBarController()
         window.rootViewController = tabBarController
     }
     
@@ -64,22 +84,22 @@ final class SplashViewController: UIViewController {
     }
 }
 
-extension SplashViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == ShowAuthenticationScreenSegueIdentifier {
-            guard
-                let navigationController = segue.destination as? UINavigationController,
-                let viewController = navigationController.viewControllers[0] as? AuthViewController
-            else {
-                print("Failed to prepare for \(ShowAuthenticationScreenSegueIdentifier)")
-                return
-            }
-            viewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
-    }
-}
+//extension SplashViewController {
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == ShowAuthenticationScreenSegueIdentifier {
+//            guard
+//                let navigationController = segue.destination as? UINavigationController,
+//                let viewController = navigationController.viewControllers[0] as? AuthViewController
+//            else {
+//                print("Failed to prepare for \(ShowAuthenticationScreenSegueIdentifier)")
+//                return
+//            }
+//            viewController.delegate = self
+//        } else {
+//            super.prepare(for: segue, sender: sender)
+//        }
+//    }
+//}
 
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
@@ -103,4 +123,14 @@ extension SplashViewController: AuthViewControllerDelegate {
     }
 }
 
+extension SplashViewController {
+    private func setConstraints() {
+        NSLayoutConstraint.activate([
+            splashImageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            splashImageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            splashImageView.widthAnchor.constraint(equalToConstant: 75),
+            splashImageView.heightAnchor.constraint(equalToConstant: 78)
+        ])
+    }
+}
 
