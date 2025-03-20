@@ -15,6 +15,7 @@ enum WebViewConstants {
 final class WebViewViewController: UIViewController {
     
     weak var delegate: WebViewViewControllerDelegate?
+    private var estimatedProgressObservation: NSKeyValueObservation?
     
     private let webView: WKWebView = {
         let webView = WKWebView()
@@ -34,11 +35,8 @@ final class WebViewViewController: UIViewController {
         button.setImage(UIImage(named: "nav_back_button"), for: .normal)
         button.tintColor = .ypBlack
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
-        
         return button
     }()
-    
-    private var estimatedProgressObservation: NSKeyValueObservation?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +47,6 @@ final class WebViewViewController: UIViewController {
         setConstraints()
         loadAuthView()
         updateProgress()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -69,9 +66,7 @@ final class WebViewViewController: UIViewController {
     }
     
     private func setupView() {
-        let elementsOnView = [webView, progressView, backButton]
-        
-        elementsOnView.forEach {
+        [webView, progressView, backButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -109,25 +104,6 @@ final class WebViewViewController: UIViewController {
     }
 }
 
-//MARK: - Constraints
-extension WebViewViewController {
-    private func setConstraints() {
-        NSLayoutConstraint.activate([
-            progressView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            progressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            progressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            
-            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            
-            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-}
-
 //MARK: - WKNavigationDelegate
 extension WebViewViewController: WKNavigationDelegate {
     func webView(
@@ -155,5 +131,24 @@ extension WebViewViewController: WKNavigationDelegate {
         } else {
             return nil
         }
+    }
+}
+
+//MARK: - Constraints
+extension WebViewViewController {
+    private func setConstraints() {
+        NSLayoutConstraint.activate([
+            progressView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            progressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            progressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            
+            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 }

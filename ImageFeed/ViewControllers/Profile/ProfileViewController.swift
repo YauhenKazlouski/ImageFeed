@@ -12,7 +12,7 @@ final class ProfileViewController: UIViewController {
     
     private let profileService = ProfileService.shared
     
-    private let userFotoImageView: UIImageView = {
+    private lazy var userFotoImageView: UIImageView = {
         let profileImage = UIImage(named: "Photo")
         let imageView = UIImageView(image: profileImage)
         imageView.layer.cornerRadius = 35
@@ -79,8 +79,6 @@ final class ProfileViewController: UIViewController {
         
         updateUserFoto()
     }
-    
-   
     
     private func updateUserFoto() {
         DispatchQueue.main.async {

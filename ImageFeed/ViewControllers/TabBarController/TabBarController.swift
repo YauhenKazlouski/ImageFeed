@@ -8,8 +8,10 @@
 import UIKit
 
 final class TabBarController: UITabBarController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
         
         let imagesListViewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController")
@@ -25,10 +27,8 @@ final class TabBarController: UITabBarController {
     private func setupTabBar() {
         tabBar.barTintColor = .ypBlack
         tabBar.isTranslucent = false
-        
         tabBar.tintColor = .ypWhite
         tabBar.unselectedItemTintColor = .ypGray
-        
         view.backgroundColor = .ypBlack
     }
 }

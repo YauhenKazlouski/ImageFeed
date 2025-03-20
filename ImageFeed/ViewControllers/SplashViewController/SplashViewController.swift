@@ -14,7 +14,7 @@ final class SplashViewController: UIViewController {
     private let oauth2TokenStorage = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
     
-    private let splashImageView: UIImageView = {
+    private lazy var splashImageView: UIImageView = {
         let splashImage = UIImage(named: "Vector")
         let imageView = UIImageView(image: splashImage)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -23,11 +23,10 @@ final class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .ypBlack
         
+        view.backgroundColor = .ypBlack
         view.addSubview(splashImageView)
         setConstraints()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -36,7 +35,6 @@ final class SplashViewController: UIViewController {
         if oauth2TokenStorage.token != nil {
             fetchProfile()
         } else {
-            
             let authViewController = AuthViewController()
             authViewController.delegate = self
             authViewController.modalPresentationStyle = .fullScreen
@@ -55,7 +53,7 @@ final class SplashViewController: UIViewController {
     
     private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-
+        
         let tabBarController = TabBarController()
         window.rootViewController = tabBarController
     }
@@ -66,7 +64,7 @@ final class SplashViewController: UIViewController {
         profileService.fetchProfile { [weak self] result in
             UIBlocingProgressHUD.dismiss()
             
-            guard let self = self else { return }
+            guard let self else { return }
             
             DispatchQueue.main.async {
                 switch result {
@@ -83,26 +81,9 @@ final class SplashViewController: UIViewController {
     }
 }
 
-
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        dismiss(animated: true) { [weak self] in
-            guard let self else { return }
-            self.fetchOAuthToken(code)
-        }
-    }
-    
-    private func fetchOAuthToken(_ code: String) {
-        oauth2Service.fetchOAuthToken(code) { [weak self] result in
-            guard let self else { return }
-            switch result {
-            case .success:
-                self.fetchProfile()
-            case .failure:
-                // TODO [Sprint 11]
-                break
-            }
-        }
+        dismiss(animated: true)
     }
 }
 

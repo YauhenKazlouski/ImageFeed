@@ -13,12 +13,12 @@ final class AuthViewController: UIViewController {
     
     weak var delegate: AuthViewControllerDelegate?
     
-    private let logoImageView: UIImageView = {
+    private lazy var logoImageView: UIImageView = {
         let logoImage = UIImage(named: "auth_screen_logo")
         let logoView = UIImageView(image: logoImage)
         return logoView
     }()
-       
+    
     private lazy var loginButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Войти", for: .normal)
@@ -60,7 +60,7 @@ final class AuthViewController: UIViewController {
 //MARK: - WebViewViewControllerDelegate
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        
+        vc.dismiss(animated: true, completion: nil)
         UIBlocingProgressHUD.show()
         
         OAuth2Servise.shared.fetchOAuthToken(code) { [weak self] result in
@@ -72,9 +72,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
             case .success(let token):
                 OAuth2TokenStorage.shared.token = token
                 print("Токен получен и сохранен: \(token)")
-                
                 self.delegate?.authViewController(self, didAuthenticateWithCode: code)
-                self.dismiss(animated: true)
                 
             case .failure(let error):
                 print("[webViewViewController]: Ошибка авторизации: \(error.localizedDescription)")
@@ -89,9 +87,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
     
     private func showErrorAlert(message: String) {
         let alert = UIAlertController(title: "Что-то пошло не так", message: message, preferredStyle: .alert)
-        
         alert.addAction(UIAlertAction(title: "Ок", style: .default))
-        
         self.present(alert, animated: true, completion: nil)
     }
 }

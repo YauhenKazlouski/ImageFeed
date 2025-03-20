@@ -7,20 +7,6 @@
 
 import Foundation
 
-struct ProfileResult: Codable {
-    let username: String
-    let firstName: String?
-    let lastName: String?
-    let bio: String?
-}
-
-struct Profile {
-    let username: String
-    let name: String
-    let loginName: String
-    let bio: String?
-}
-
 final class ProfileService {
     static let shared = ProfileService()
     private init() {}
@@ -31,15 +17,14 @@ final class ProfileService {
     private var isFetching: Bool = false
     
     func makeProfileRequest(token: String) -> URLRequest? {
-        guard let url = URL(string: "https://api.unsplash.com/me") else {
-            print("[makeProfileRequest]: InvalidURL - неверный URL")
+        guard let url = URL(string: "/me", relativeTo: Constants.defaultBaseURL) else {
+            print("[makeProfileRequest]: Ошибка: невозможно создать URL для запроса")
             return nil
         }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
         return request
     }
     
@@ -68,7 +53,7 @@ final class ProfileService {
         
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             DispatchQueue.main.async {
-                guard let self = self else { return }
+                guard let self else { return }
                 self.isFetching = false
                 
                 switch result {
@@ -77,13 +62,14 @@ final class ProfileService {
                         username: profileResult.username,
                         name: "\(profileResult.firstName ?? "") \(profileResult.lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines),
                         loginName: "@\(profileResult.username)",
-                        bio: profileResult.bio)
+                        bio: profileResult.bio
+                    )
                     
                     self.profile = profile
                     completion(.success(profile))
                     
                 case .failure(let error):
-                    print("[fetchProfile]: \(error.errorDescription())")
+                    print("[fetchProfile]: \(error.localizedDescription)")
                     completion(.failure(error))
                 }
             }

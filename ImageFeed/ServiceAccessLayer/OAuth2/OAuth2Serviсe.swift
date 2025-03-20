@@ -7,23 +7,9 @@
 
 import Foundation
 
-struct OAuthTokenResponseBody: Codable {
-    let accessToken: String
-    let expiresIn: Int?
-    let refreshToken: String
-    let scope: String
-    let tokenType: String
-    let createdAt: Int
-    let userId: Int
-    let username: String
-}
-
 enum AuthServiceError: Error {
     case invalidRequest
-    case networkError(Error)
-    case httpError(Int)
     case noData
-    case decodingError(Error)
     case missingToken
 }
 
@@ -53,7 +39,7 @@ final class OAuth2Servise {
             + "&&grant_type=authorization_code",
             relativeTo: baseURL
         ) else {
-            print("Ошибка: невозможно создать URL для запроса")
+            print("[makeOAuthTokenRequest]: Невозможно создать URL для запроса")
             return nil
         }
         
@@ -62,7 +48,7 @@ final class OAuth2Servise {
         return request
     }
     
-    //MARK: - Fetch token
+   // MARK: - Fetch token
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
         
@@ -82,19 +68,23 @@ final class OAuth2Servise {
             }
             return
         }
+        
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             DispatchQueue.main.async {
                 guard let self else { return }
                 
                 switch result {
                 case .success(let oAuthTokenResponseBody):
-                    
                     self.authToken = oAuthTokenResponseBody.accessToken
                     OAuth2TokenStorage.shared.token = oAuthTokenResponseBody.accessToken
                     completion(.success(oAuthTokenResponseBody.accessToken))
                     
                 case .failure(let error):
-                    print("[fetchOAuthToken]: \(error.errorDescription())")
+                    if let networkError = error as? NetworkError {
+                        print("[fetchOAuthToken]: \(networkError.errorDescription ?? "Unknown error")")
+                    } else {
+                        print("[fetchOAuthToken]: \(error.localizedDescription)")
+                    }
                     completion(.failure(error))
                 }
                 
