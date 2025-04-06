@@ -31,10 +31,10 @@ final class TabBarController: UITabBarController {
         setupTabBarAppearance()
     }
     
+    // MARK: - Private methods
     private func setupTabBarAppearance() {
         tabBar.barTintColor = UIColor(named: "YP Black")
         tabBar.isTranslucent = false
-        
         tabBar.tintColor = .white
         tabBar.unselectedItemTintColor = UIColor(named: "YP Gray")
         

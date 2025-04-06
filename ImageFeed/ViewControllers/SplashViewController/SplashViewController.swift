@@ -8,16 +8,13 @@
 import UIKit
 
 final class SplashViewController: UIViewController {
-    // MARK: - Constants
-    private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
-    
     // MARK: - Private Properties
+    private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     
-    // MARK: - UI Elements
     private let splashImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Vector")
@@ -35,7 +32,6 @@ final class SplashViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // проверяем наличие токена
         if let token = oauth2TokenStorage.token {
             fetchProfile(token)
         } else {
@@ -53,7 +49,7 @@ final class SplashViewController: UIViewController {
         .lightContent
     }
     
-    // MARK: - Private Methods
+    // MARK: - Private methods
     private func setupView() {
         view.backgroundColor = .ypBlack
         view.addSubview(splashImageView)
@@ -138,7 +134,6 @@ extension SplashViewController: AuthViewControllerDelegate {
 }
 
 //MARK: - setConstraints
-
 extension SplashViewController {
     private func setConstraints() {
         NSLayoutConstraint.activate([

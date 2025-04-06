@@ -9,7 +9,7 @@ import UIKit
 import Kingfisher
 
 final class SingleImageViewController: UIViewController {
-    
+    // MARK: - Private Properties
     var image: UIImage? {
         didSet {
             guard isViewLoaded, let image else { return }
@@ -25,6 +25,7 @@ final class SingleImageViewController: UIViewController {
         scrollView.showsHorizontalScrollIndicator = false
         return scrollView
     }()
+    
     private var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -32,7 +33,13 @@ final class SingleImageViewController: UIViewController {
         return imageView
     }()
     
-    private var shareButton: UIButton!
+    private lazy var shareButton: UIButton = {
+        let shareImage = UIImage(named: "sharing_button")
+        let shareButton = UIButton(type: .custom)
+        shareButton.setImage(shareImage, for: .normal)
+        shareButton.addTarget(self, action: #selector(didTapShareButton), for: .touchUpInside)
+        return shareButton
+    }()
     
     var imageURL: String? {
         didSet{
@@ -54,19 +61,9 @@ final class SingleImageViewController: UIViewController {
         view.backgroundColor = .ypBlack
         
         scrollView.delegate = self
+        
         view.addSubview(scrollView)
-        
         scrollView.addSubview(imageView)
-        
-        shareButton = UIButton(type: .system)
-        
-        if let shareImage = UIImage(named: "sharing_button")?.withRenderingMode(.alwaysOriginal) {
-            shareButton.setImage(shareImage, for: .normal)
-        } else {
-            print("Изображение 'sharing_button' не найдено")
-        }
-        
-        shareButton.addTarget(self, action: #selector(didTapShareButton), for: .touchUpInside)
         view.addSubview(shareButton)
         
         [scrollView, imageView, shareButton].forEach {

@@ -9,7 +9,6 @@ import UIKit
 import Kingfisher
 
 final class ProfileViewController: UIViewController {
-    
     // MARK: - Private Properties
     private let nameLabel: UILabel = {
         let nameLabel = UILabel()
@@ -53,13 +52,13 @@ final class ProfileViewController: UIViewController {
         let logoutButton = UIButton(type: .system)
         logoutButton.setImage(logoutImage, for: .normal)
         logoutButton.tintColor = .ypRed
-        logoutButton.translatesAutoresizingMaskIntoConstraints = false
         logoutButton.addTarget(self, action: #selector(didTapLogoutButton), for: .touchUpInside)
         return logoutButton
     }()
     
     private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
+    private let profileLogoutService = ProfileLogoutService.shared
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -70,7 +69,6 @@ final class ProfileViewController: UIViewController {
         setupView()
         updateProfileDetails()
         
-        // обсервер для уведомлений об изменении аватарки
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
                 forName: ProfileImageService.didChangeNotification,
@@ -86,7 +84,8 @@ final class ProfileViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-    // MARK: - UI Setup
+    
+    // MARK: - Private methods
     private func setupView() {
         [imageView, nameLabel, loginNameLabel, descriptionLabel, logoutButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -95,11 +94,6 @@ final class ProfileViewController: UIViewController {
         setConstraints()
     }
     
-    @objc private func didTapLogoutButton() {
-        // обработка нажатия на кнопку выхода
-    }
-    
-    // MARK: - Update Methods
     private func updateProfileDetails() {
         guard let profile = profileService.profile else { return }
         
@@ -136,6 +130,17 @@ final class ProfileViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    // MARK: - Actions
+    @objc private func didTapLogoutButton() {
+        let alert = UIAlertController(title: "Покаб пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            self?.profileLogoutService.logout()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Нет", style: .cancel))
+        present(alert, animated: true)
     }
 }
 

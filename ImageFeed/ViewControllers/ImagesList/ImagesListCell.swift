@@ -23,6 +23,7 @@ final class ImagesListCell: UITableViewCell {
     
     private let likeButton: UIButton = {
         let button = UIButton()
+        button.isHidden = true
         button.addTarget(nil, action: #selector(likeButtonClicked), for: .touchUpInside)
         return button
     }()
@@ -31,6 +32,7 @@ final class ImagesListCell: UITableViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 13)
         label.textColor = .ypWhite
+        label.isHidden = true
         return label
     }()
     
@@ -70,12 +72,27 @@ final class ImagesListCell: UITableViewCell {
     
     // MARK: - Public functions
     func configure(with photo: Photo, using dateFormatter: DateFormatter) {
+        cellImage.contentMode = .center
         dateLabel.text = photo.createAt.map { dateFormatter.string(from: $0) } ?? ""
         setIsLiked(photo.isLiked)
+        let placeholderImage = UIImage(named: "placeholderImage")
         
         if let url = URL(string: photo.thumbImageURL) {
             cellImage.kf.setImage(with: url,
-                                  options: [.transition(.fade(0.2))])
+                                  placeholder: placeholderImage,
+                                  options: [.transition(.fade(0.2))]) { result in
+                switch result {
+                case .success(let imageResult):
+                    self.likeButton.isHidden = false
+                    self.dateLabel.isHidden = false
+                    self.cellImage.contentMode = .scaleAspectFill
+                    self.cellImage.image = imageResult.image
+                case .failure:
+                    self.cellImage.contentMode = .center
+                    self.likeButton.isHidden = true
+                    self.dateLabel.isHidden = true
+                }
+            }
         }
     }
     

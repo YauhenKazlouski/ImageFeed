@@ -84,4 +84,11 @@ final class ProfileImageService {
         self.task = task
         task.resume()
     }
+    
+    func reset() {
+        avatarURL = nil
+        task?.cancel()
+        task = nil
+        isFetching = false
+    }
 }
