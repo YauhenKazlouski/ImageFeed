@@ -16,6 +16,7 @@
 		279716872DA2525100A97BCD /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279716862DA2525100A97BCD /* Photo.swift */; };
 		279716892DA2538F00A97BCD /* UrlsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279716882DA2538F00A97BCD /* UrlsResult.swift */; };
 		2797168B2DA2540200A97BCD /* PhotoResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2797168A2DA2540200A97BCD /* PhotoResult.swift */; };
+		279716912DA2804800A97BCD /* ImagesListCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279716902DA2804800A97BCD /* ImagesListCellDelegate.swift */; };
 		279A141E2D8AE3F9003266DB /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A141D2D8AE3F9003266DB /* TabBarController.swift */; };
 		27B8326E2D5CDC050053F5C0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B8326D2D5CDC050053F5C0 /* ProfileViewController.swift */; };
 		27D22FA32D5CFFF8005F7EE3 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D22FA22D5CFFF8005F7EE3 /* SingleImageViewController.swift */; };
@@ -49,6 +50,7 @@
 		279716862DA2525100A97BCD /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		279716882DA2538F00A97BCD /* UrlsResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlsResult.swift; sourceTree = "<group>"; };
 		2797168A2DA2540200A97BCD /* PhotoResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoResult.swift; sourceTree = "<group>"; };
+		279716902DA2804800A97BCD /* ImagesListCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCellDelegate.swift; sourceTree = "<group>"; };
 		279A141D2D8AE3F9003266DB /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		27B8326D2D5CDC050053F5C0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		27D22FA22D5CFFF8005F7EE3 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 			children = (
 				27DA5DE32D74DAAF00D8D997 /* AuthViewControllerDelegate.swift */,
 				27DA5DCE2D73840F00D8D997 /* WebViewControllerDelegate.swift */,
+				279716902DA2804800A97BCD /* ImagesListCellDelegate.swift */,
 			);
 			path = Delegates;
 			sourceTree = "<group>";
@@ -349,6 +352,7 @@
 			files = (
 				279716872DA2525100A97BCD /* Photo.swift in Sources */,
 				27DA5DD42D74B34900D8D997 /* OAuth2TokenStorage.swift in Sources */,
+				279716912DA2804800A97BCD /* ImagesListCellDelegate.swift in Sources */,
 				279716852DA2523500A97BCD /* ImagesListService.swift in Sources */,
 				27DA5DDB2D74CC3800D8D997 /* URLSession+data.swift in Sources */,
 				7C84EF012D4272650010ACD5 /* ImagesListViewController.swift in Sources */,

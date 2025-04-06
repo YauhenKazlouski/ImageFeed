@@ -16,3 +16,8 @@ struct PhotoResult: Decodable {
     let likedByUser: Bool
     let urls: UrlsResult
 }
+ 
+struct LikeResult: Decodable {
+    let photo: PhotoResult
+}
+

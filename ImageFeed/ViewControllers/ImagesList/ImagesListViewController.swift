@@ -14,6 +14,7 @@ final class ImagesListViewController: UIViewController {
         tableView.backgroundColor = .ypBlack
         tableView.separatorStyle = .none
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        tableView.register(ImagesListCell.self, forCellReuseIdentifier: ImagesListCell.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -48,11 +49,8 @@ final class ImagesListViewController: UIViewController {
         view.addSubview(tableView)
         setConstraints()
         
-        tableView.register(ImagesListCell.self, forCellReuseIdentifier: ImagesListCell.reuseIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
-        
-//        tableView.rowHeight = 200
     }
     
     private func loadPhotos() {
@@ -90,6 +88,15 @@ final class ImagesListViewController: UIViewController {
         }
     }
     
+    private func showLikeErrorAlert(_ error: Error) {
+        let alert = UIAlertController(title: "Ошибка",
+                                      message: "Не удалось поставить лайк: \(error.localizedDescription)",
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
 }
 
 // MARK: - UITableViewDataSource
@@ -105,6 +112,7 @@ extension ImagesListViewController: UITableViewDataSource {
         
         let photo = photos[indexPath.row]
         cell.configure(with: photo, using: dateFormatter)
+        cell.delegate = self
         return cell
     }
 }
@@ -137,6 +145,30 @@ extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == photos.count - 1 {
             imagesListService.fetchPhotosNextPage()
+        }
+    }
+}
+
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let photo = photos[indexPath.row]
+        
+        imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                switch result {
+                case .success:
+                    if let index  = self.tableView.indexPath(for: cell),
+                       let newPhoto = self.imagesListService.photos.first(where: { $0.id == photo.id }) {
+                        self.photos[index.row] = newPhoto
+                        cell.setIsLiked(newPhoto.isLiked)
+                    }
+                case .failure(let error):
+                    self.showLikeErrorAlert(error)
+                    cell.setIsLiked(photo.isLiked)
+                }
+            }
         }
     }
 }

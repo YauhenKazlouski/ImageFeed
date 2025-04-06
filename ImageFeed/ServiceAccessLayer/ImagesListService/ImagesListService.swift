@@ -101,4 +101,64 @@ final class ImagesListService {
         task.resume()
     }
     
+    private func makeChangeLikeRequest(photoId: String, token: String, isLike: Bool) -> URLRequest? {
+        guard let url = URL(string: "/photos/\(photoId)/like", relativeTo: Constants.defaultBaseURL) else {
+            print("[makeChangeLikeRequest]: Ошибка - Невозможно создать URL")
+            return nil
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = isLike ? "POST" : "DELETE"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
+    }
+    
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        guard !isFetching else {
+            print("[changeLike]: FetchingInProgress - запрос уже выполняется")
+            return
+        }
+        
+        guard let token = oAuth2TokenStorage.token else {
+            print("[changeLike]: MissingToken - токен отсутствует")
+            return
+        }
+        
+        guard let request = makeChangeLikeRequest(photoId: photoId, token: token, isLike: isLike) else {
+            print("[changeLike]: InvalidRequest - не удалось создать URLRequest")
+            DispatchQueue.main.async {
+                completion(.failure(AuthServiceError.invalidRequest))
+            }
+            return
+        }
+        
+        isFetching = true
+        task?.cancel()
+        
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<LikeResult, Error>) in
+            assert(Thread.isMainThread)
+            
+            guard let self else { return }
+            self.isFetching = false
+            
+            switch result {
+            case .success:
+                if let index = self.photos.firstIndex(where: { $0.id == photoId}) {
+                
+                    DispatchQueue.main.async {
+                        self.photos[index].isLiked = isLike
+                        completion(.success(()))
+                        NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: self)
+                    }
+                }
+                
+            case .failure(let error):
+                print("[changeLike]: Ошибка - \(error.localizedDescription)")
+                completion(.failure(error))
+            }
+        }
+        
+        self.task = task
+        task.resume()
+    }
 }

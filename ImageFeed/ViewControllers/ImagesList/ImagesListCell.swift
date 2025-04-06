@@ -10,6 +10,7 @@ import Kingfisher
 
 final class ImagesListCell: UITableViewCell {
     static let reuseIdentifier = "ImagesListCell"
+    weak var delegate: ImagesListCellDelegate?
     
     private let cellImage: UIImageView = {
         let imageView = UIImageView()
@@ -22,6 +23,7 @@ final class ImagesListCell: UITableViewCell {
     
     private let likeButton: UIButton = {
         let button = UIButton()
+        button.addTarget(nil, action: #selector(likeButtonClicked), for: .touchUpInside)
         return button
     }()
     
@@ -62,9 +64,8 @@ final class ImagesListCell: UITableViewCell {
         selectionStyle = .none
     }
     
-    private func setIsLiked(_ isLiked: Bool) {
-        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
-        likeButton.setImage(likeImage, for: .normal)
+    @objc private func likeButtonClicked() {
+        delegate?.imageListCellDidTapLike(self)
     }
     
     // MARK: - Public functions
@@ -78,6 +79,11 @@ final class ImagesListCell: UITableViewCell {
                                   options: [.transition(.fade(0.2))])
         }
     }
+    
+    func setIsLiked(_ isLiked: Bool) {
+    let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
+    likeButton.setImage(likeImage, for: .normal)
+}
 }
 
 //MARK: - setConstraints
