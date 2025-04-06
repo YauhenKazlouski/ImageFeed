@@ -11,69 +11,62 @@ final class ProfileImageService {
     static let shared = ProfileImageService()
     private init() {}
     
-    private let oAuth2TokenStorage = OAuth2TokenStorage.shared
-    private (set) var avatarURL: String?
+    private let tokenStorage = OAuth2TokenStorage.shared
+    private(set) var avatarURL: String?
     private var isFetching: Bool = false
     private var task: URLSessionTask?
-    static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
+    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
+    private let urlSession = URLSession.shared
     
-    private func makeProfileImageRequest(username: String, token: String) -> URLRequest? {
-        guard let url = URL(string: "/users/\(username)", relativeTo: Constants.defaultBaseURL) else {
-            print("[makeProfileImageRequest]: Ошибка: невозможно создать URL для запроса")
-            return nil
+    func fetchProfileImageURL(username: String, completion: @escaping (Result<String, Error>) -> Void) {
+        guard !isFetching else {
+            print("[fetchProfileImageURL]: Ошибка - Запрос уже выполняется")
+            return
+        }
+        
+        guard let token = tokenStorage.token else {
+            print("[fetchProfileImageURL]: Ошибка - отсутствует токен")
+            completion(.failure(AuthServiceError.invalidRequest))
+            isFetching = false
+            return
+        }
+        
+        guard let encodedUsername = username.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: "/users/\(encodedUsername)", relativeTo: Constants.defaultBaseURL) else {
+            print("[fetchProfileImageURL]: Ошибка - неверный URL")
+            completion(.failure(AuthServiceError.invalidRequest))
+            isFetching = false
+            return
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        return request
-    }
-    
-    func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
-        guard !isFetching else {
-            print("[fetchProfileImageURL]: FetchingInProgress - запрос уже выполняется")
-            return
-        }
-        
-        guard let token = oAuth2TokenStorage.token else {
-            print("[fetchProfileImageURL]: MissingToken - токен отсутствует")
-            completion(.failure(AuthServiceError.missingToken))
-            return
-        }
-        
-        guard let request = makeProfileImageRequest(username: username, token: token) else {
-            print("[fetchProfileImageURL]: InvalidRequest - не удалось создать URLRequest")
-            DispatchQueue.main.async {
-                completion(.failure(AuthServiceError.invalidRequest))
-            }
-            return
-        }
+        request.httpMethod = "GET"
         
         isFetching = true
         task?.cancel()
         
-        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             DispatchQueue.main.async {
                 guard let self else { return }
                 self.isFetching = false
                 
                 switch result {
                 case .success(let userResult):
-                    guard let profileImageURL = userResult.profileImage?.large else {
+                    guard let profileImage = userResult.profileImage else {
                         print("[fetchProfileImageURL]: NoData - отсутствует URL аватара")
                         completion(.failure(AuthServiceError.noData))
                         return
                     }
                     
-                    self.avatarURL = profileImageURL
-                    completion(.success(profileImageURL))
+                    self.avatarURL = profileImage.large
+                    completion(.success(profileImage.large))
                     
                     NotificationCenter.default.post(
                         name: ProfileImageService.didChangeNotification,
                         object: self,
-                        userInfo: ["URL": profileImageURL]
+                        userInfo: ["URL": profileImage.large]
                     )
-                    
                 case .failure(let error):
                     print("[fetchProfileImageURL]: \(error.localizedDescription)")
                     completion(.failure(error))

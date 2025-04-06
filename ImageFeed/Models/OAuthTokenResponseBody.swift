@@ -7,9 +7,13 @@
 
 import Foundation
 
-struct OAuthTokenResponseBody: Codable {
+struct OAuthTokenResponseBody: Decodable {
     let accessToken: String
-    let tokenType: String
+    let expiresIn: Int?
+    let refreshToken: String
     let scope: String
+    let tokenType: String
     let createdAt: Int
+    let userId: Int
+    let username: String
 }

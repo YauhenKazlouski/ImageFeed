@@ -8,75 +8,72 @@
 import UIKit
 import WebKit
 
-enum WebViewConstants {
-    static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
-}
-
-final class WebViewViewController: UIViewController {
+final class WebViewViewController: UIViewController, WKUIDelegate {
+    enum WebViewConstants {
+        static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
+    }
     
     weak var delegate: WebViewViewControllerDelegate?
-    private var estimatedProgressObservation: NSKeyValueObservation?
+    private var progressObservation: NSKeyValueObservation?
     
-    private let webView: WKWebView = {
+    private lazy var webView: WKWebView = {
         let webView = WKWebView()
         webView.backgroundColor = .ypWhite
         return webView
     }()
     
-    private let progressView: UIProgressView = {
-        let progress = UIProgressView(progressViewStyle: .default)
-        progress.progressTintColor = .ypBlack
-        progress.progress = 0.5
-        return progress
+    private lazy var progressView: UIProgressView = {
+        let progressView = UIProgressView()
+        progressView.progressTintColor = .ypBlack
+        progressView.progress = 0.5
+        return progressView
     }()
     
-    private lazy var backButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "nav_back_button"), for: .normal)
-        button.tintColor = .ypBlack
-        button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
-        return button
-    }()
-    
+    //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypWhite
+        setupView()
+        loadAuthView()
+        
+        
+        let backButtonImage = UIImage(named: "nav_back_button")?.withRenderingMode(.alwaysOriginal)
+        let backButton = UIBarButtonItem(
+            image: backButtonImage,
+            style: .plain,
+            target: self,
+            action: #selector(didTapBackButton)
+        )
+        navigationItem.leftBarButtonItem = backButton
         
         webView.navigationDelegate = self
         
-        setupView()
-        setConstraints()
-        loadAuthView()
-        updateProgress()
+        progressObservation = webView.observe(\.estimatedProgress, options: .new) { [weak self] _, _ in
+            self?.updateProgress()
+        }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        estimatedProgressObservation = webView.observe(
-            \.estimatedProgress,
-             options: [],
-             changeHandler: { [weak self] _, _ in
-                 guard let self else { return }
-                 self.updateProgress()
-             })
+    // MARK: - Override properties
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
     }
     
+    //MARK: - Deinit
     deinit {
-        estimatedProgressObservation?.invalidate()
+        progressObservation?.invalidate()
     }
     
+    // MARK: - Private methods
     private func setupView() {
-        [webView, progressView, backButton].forEach {
+        [webView, progressView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
+        setConstraints()
     }
     
     private func loadAuthView() {
-        guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizeURLString) else {
-            print("[loadAuthView]: Невозможно создать URLComponents")
-            return
-        }
+        guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizeURLString) else { return }
         
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: Constants.accessKey),
@@ -84,11 +81,7 @@ final class WebViewViewController: UIViewController {
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "scope", value: Constants.accessScope)
         ]
-        
-        guard let url = urlComponents.url else {
-            print("[loadAuthView]: Невозможно создать URL")
-            return
-        }
+        guard let url = urlComponents.url else { return }
         
         let request = URLRequest(url: url)
         webView.load(request)
@@ -96,7 +89,7 @@ final class WebViewViewController: UIViewController {
     
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
-        progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+        progressView.isHidden = abs(webView.estimatedProgress - 1.0) <= 0.0001
     }
     
     @objc private func didTapBackButton() {
@@ -106,11 +99,8 @@ final class WebViewViewController: UIViewController {
 
 //MARK: - WKNavigationDelegate
 extension WebViewViewController: WKNavigationDelegate {
-    func webView(
-        _ webView: WKWebView,
-        decidePolicyFor navigationAction: WKNavigationAction,
-        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
-    ) {
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let code = code(from: navigationAction) {
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)
@@ -132,23 +122,32 @@ extension WebViewViewController: WKNavigationDelegate {
             return nil
         }
     }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        progressView.isHidden = true
+    }
+    
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        progressView.isHidden = true
+    }
+    
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        progressView.isHidden = false
+    }
 }
 
-//MARK: - Constraints
+//MARK: - setConstraints
 extension WebViewViewController {
     private func setConstraints() {
         NSLayoutConstraint.activate([
-            progressView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            progressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            progressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            
-            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            
             webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            progressView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            progressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            progressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
     }
 }
