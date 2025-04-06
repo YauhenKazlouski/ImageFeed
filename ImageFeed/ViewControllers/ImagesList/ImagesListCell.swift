@@ -75,15 +75,14 @@ final class ImagesListCell: UITableViewCell {
         
         if let url = URL(string: photo.thumbImageURL) {
             cellImage.kf.setImage(with: url,
-                                  placeholder: UIImage(named: "placeholderImage"),
                                   options: [.transition(.fade(0.2))])
         }
     }
     
     func setIsLiked(_ isLiked: Bool) {
-    let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
-    likeButton.setImage(likeImage, for: .normal)
-}
+        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
+        likeButton.setImage(likeImage, for: .normal)
+    }
 }
 
 //MARK: - setConstraints

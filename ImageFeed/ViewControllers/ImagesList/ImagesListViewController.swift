@@ -88,15 +88,20 @@ final class ImagesListViewController: UIViewController {
         }
     }
     
-    private func showLikeErrorAlert(_ error: Error) {
+    private func showLikeAlert(_ error: Error) {
         let alert = UIAlertController(title: "Ошибка",
-                                      message: "Не удалось поставить лайк: \(error.localizedDescription)",
+                                      message: "Не удалось поставить лайк",
                                       preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
     
+    private func showImageAlert() {
+        let alert = UIAlertController(title: "Ошибка", message: "Некорректная ссылка на изображение", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -120,13 +125,17 @@ extension ImagesListViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         
+        let photo = photos[indexPath.row]
+        guard photo.isValidLargeURL else {
+            showImageAlert()
+            return
+        }
         
         let singleImageVC = SingleImageViewController()
+        singleImageVC.imageURL = photo.largeImageURL
         singleImageVC.hidesBottomBarWhenPushed = true
-        if let image = UIImage(named: photosName[indexPath.row]) {
-            singleImageVC.image = image
-        }
         
         navigationController?.pushViewController(singleImageVC, animated: true)
     }
@@ -165,7 +174,7 @@ extension ImagesListViewController: ImagesListCellDelegate {
                         cell.setIsLiked(newPhoto.isLiked)
                     }
                 case .failure(let error):
-                    self.showLikeErrorAlert(error)
+                    self.showLikeAlert(error)
                     cell.setIsLiked(photo.isLiked)
                 }
             }

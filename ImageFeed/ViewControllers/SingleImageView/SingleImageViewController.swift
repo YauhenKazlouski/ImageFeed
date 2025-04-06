@@ -6,10 +6,10 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class SingleImageViewController: UIViewController {
     
-    // MARK: - Public Properties
     var image: UIImage? {
         didSet {
             guard isViewLoaded, let image else { return }
@@ -17,7 +17,6 @@ final class SingleImageViewController: UIViewController {
         }
     }
     
-    // MARK: - UI Elements
     private var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.minimumZoomScale = 1.0
@@ -35,24 +34,19 @@ final class SingleImageViewController: UIViewController {
     
     private var shareButton: UIButton!
     
+    var imageURL: String? {
+        didSet{
+            guard isViewLoaded else { return }
+            loadImage()
+        }
+    }
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        if let image = image {
-            updateImage(image)
-        }
-        
-        let backButtonImage = UIImage(named: "nav_back_button")?.withRenderingMode(.alwaysOriginal)
-        let backButton = UIBarButtonItem(
-            image: backButtonImage,
-            style: .plain,
-            target: self,
-            action: #selector(didTapBackButton)
-        )
-        navigationItem.leftBarButtonItem = backButton
-        
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
+        loadInitialContent()
+        setupNavigationBar()
     }
     
     // MARK: - Private Methods
@@ -85,6 +79,7 @@ final class SingleImageViewController: UIViewController {
     private func updateImage(_ image: UIImage) {
         imageView.image = image
         rescaleAndCenterImageInScrollView(image: image)
+        hideShareButton()
     }
     
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
@@ -92,7 +87,7 @@ final class SingleImageViewController: UIViewController {
         let imageSize = image.size
         
         guard imageSize.width > 0, imageSize.height > 0 else {
-            print("Ошибка: ширина или высота изображения равна нулю")
+            print("[rescaleAndCenterImageInScrollView]: Ошибка - ширина или высота изображения равна нулю")
             return
         }
         
@@ -118,6 +113,55 @@ final class SingleImageViewController: UIViewController {
             bottom: verticalInset,
             right: horizontalInset
         )
+    }
+    
+    private func hideShareButton() {
+        shareButton.isHidden = image == nil
+    }
+    
+    private func setupNavigationBar() {
+        let backButtonImage = UIImage(named: "nav_back_button")?.withRenderingMode(.alwaysOriginal)
+        let backButton = UIBarButtonItem(
+            image: backButtonImage,
+            style: .plain,
+            target: self,
+            action: #selector(didTapBackButton)
+        )
+        navigationItem.leftBarButtonItem = backButton
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+    
+    private func loadImage() {
+        guard let imageURL, let url = URL(string: imageURL) else { return }
+        let placeholderImage = UIImage(named: "placeholderImage")
+        imageView.contentMode = .center
+        
+        UIBlocingProgressHUD.show()
+        
+        imageView.kf.setImage(with: url,
+                              placeholder: placeholderImage,
+                              options: [.transition(.fade(0.2))]) { [weak self] result in
+            UIBlocingProgressHUD.dismiss()
+            
+            guard let self else { return }
+            switch result {
+            case .success(let imageURL):
+                imageView.contentMode = .scaleAspectFill
+                self.image = imageURL.image
+                self.rescaleAndCenterImageInScrollView(image: imageURL.image)
+            case .failure(let error):
+                print("[loadImage]: Ошибка при загрузке \(error.localizedDescription)")
+            }
+            self.hideShareButton()
+        }
+    }
+    
+    private func loadInitialContent() {
+        if let image {
+            updateImage(image)
+        } else if imageURL != nil {
+            loadImage()
+        }
     }
     
     // MARK: - Actions
