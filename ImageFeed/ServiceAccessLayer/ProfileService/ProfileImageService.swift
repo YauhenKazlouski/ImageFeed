@@ -18,30 +18,37 @@ final class ProfileImageService {
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     private let urlSession = URLSession.shared
     
+    private func makeProfileImageRequest(username: String, token: String) -> URLRequest? {
+        guard let url = URL(string: "/users/\(username)", relativeTo: Constants.defaultBaseURL) else {
+            print("[makeProfileImageRequest]: Ошибка - невозможно создать URL для запроса")
+            return nil
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
+    }
+    
     func fetchProfileImageURL(username: String, completion: @escaping (Result<String, Error>) -> Void) {
         guard !isFetching else {
-            print("[fetchProfileImageURL]: Ошибка - Запрос уже выполняется")
+            print("[fetchProfileImageURL]: FetchingInProgress - запрос уже выполняется")
             return
         }
         
         guard let token = tokenStorage.token else {
-            print("[fetchProfileImageURL]: Ошибка - отсутствует токен")
+            print("[fetchProfileImageURL]: MissingToken - токен отсутствует")
             completion(.failure(AuthServiceError.invalidRequest))
             isFetching = false
             return
         }
         
-        guard let encodedUsername = username.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let url = URL(string: "/users/\(encodedUsername)", relativeTo: Constants.defaultBaseURL) else {
-            print("[fetchProfileImageURL]: Ошибка - неверный URL")
-            completion(.failure(AuthServiceError.invalidRequest))
-            isFetching = false
+        guard let request = makeProfileImageRequest(username: username, token: token) else {
+            print("[fetchProfileImageURL]: InvalidRequest - не удалось создать URLRequest")
+            DispatchQueue.main.async {
+                completion(.failure(AuthServiceError.invalidRequest))
+            }
             return
         }
-        
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.httpMethod = "GET"
         
         isFetching = true
         task?.cancel()
@@ -68,7 +75,7 @@ final class ProfileImageService {
                         userInfo: ["URL": profileImage.large]
                     )
                 case .failure(let error):
-                    print("[fetchProfileImageURL]: \(error.localizedDescription)")
+                    print("[fetchProfileImageURL]: Ошибка - \(error.localizedDescription)")
                     completion(.failure(error))
                 }
             }

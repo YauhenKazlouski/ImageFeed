@@ -6,17 +6,17 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ImagesListCell: UITableViewCell {
-    // MARK: - Public properties
     static let reuseIdentifier = "ImagesListCell"
     
-    // MARK: - UI Elements
     private let cellImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 16
+        imageView.backgroundColor = .ypBackground
         return imageView
     }()
     
@@ -27,8 +27,8 @@ final class ImagesListCell: UITableViewCell {
     
     private let dateLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 13)
-        label.textColor = UIColor(named: "YP White")
+        label.font = .systemFont(ofSize: 13)
+        label.textColor = .ypWhite
         return label
     }()
     
@@ -36,10 +36,17 @@ final class ImagesListCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
+        selectionStyle = .none
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cellImage.kf.cancelDownloadTask()
+        cellImage.image = nil
     }
     
     // MARK: - Private functions
@@ -51,16 +58,25 @@ final class ImagesListCell: UITableViewCell {
         
         setConstraints()
         
-        backgroundColor = UIColor(named: "YP Black")
+        backgroundColor = .ypBlack
         selectionStyle = .none
     }
     
-    // MARK: - Public functions
-    func configure(image: UIImage?, dateText: String, isLiked: Bool) {
-        cellImage.image = image
-        dateLabel.text = dateText
+    private func setIsLiked(_ isLiked: Bool) {
         let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
         likeButton.setImage(likeImage, for: .normal)
+    }
+    
+    // MARK: - Public functions
+    func configure(with photo: Photo, using dateFormatter: DateFormatter) {
+        dateLabel.text = photo.createAt.map { dateFormatter.string(from: $0) } ?? ""
+        setIsLiked(photo.isLiked)
+        
+        if let url = URL(string: photo.thumbImageURL) {
+            cellImage.kf.setImage(with: url,
+                                  placeholder: UIImage(named: "placeholderImage"),
+                                  options: [.transition(.fade(0.2))])
+        }
     }
 }
 

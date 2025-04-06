@@ -29,7 +29,7 @@ final class SplashViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
+        setupView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -54,16 +54,11 @@ final class SplashViewController: UIViewController {
     }
     
     // MARK: - Private Methods
-    private func setupUI() {
-        view.backgroundColor = UIColor(named: "YP Black")
+    private func setupView() {
+        view.backgroundColor = .ypBlack
         view.addSubview(splashImageView)
         
-        NSLayoutConstraint.activate([
-            splashImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            splashImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            splashImageView.widthAnchor.constraint(equalToConstant: 75),
-            splashImageView.heightAnchor.constraint(equalToConstant: 77.68)
-        ])
+        setConstraints()
     }
     
     private func switchToTabBarController() {
@@ -139,6 +134,19 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.showErrorAlert(message: "Не удалось войти. Пожалуйста, попробуйте снова.")
             }
         }
+    }
+}
+
+//MARK: - setConstraints
+
+extension SplashViewController {
+    private func setConstraints() {
+        NSLayoutConstraint.activate([
+            splashImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            splashImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            splashImageView.widthAnchor.constraint(equalToConstant: 75),
+            splashImageView.heightAnchor.constraint(equalToConstant: 77.68)
+        ])
     }
 }
 
