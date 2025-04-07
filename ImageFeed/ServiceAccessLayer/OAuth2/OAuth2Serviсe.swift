@@ -7,26 +7,88 @@
 
 import Foundation
 
+// MARK: - AuthServiceError
 enum AuthServiceError: Error {
     case invalidRequest
+    case networkError(Error)
+    case httpError(Int)
     case noData
-    case missingToken
+    case decodingError(Error)
 }
 
-final class OAuth2Servise {
+// MARK: - OAuth2Service
+final class OAuth2Service {
+    // MARK: - Singleton
+    static let shared = OAuth2Service()
     
-    static let shared = OAuth2Servise()
     private init() {}
     
+    // MARK: - Private Properties
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     private var lastCode: String?
     private var authToken: String?
     
-    //MARK: - Request creating
-    func makeOAuthTokenRequest(code: String) -> URLRequest? {
+    private var isFetching = false
+    
+    // MARK: - Fetch OAuth Token
+    func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        assert(Thread.isMainThread)
+        
+        if isFetching {
+            print("[fetchOAuthToken]: Ошибка - запрос уже выполняется")
+            completion(.failure(AuthServiceError.invalidRequest))
+            return
+        }
+        
+        if let currentTask = task {
+            if lastCode == code {
+                print("[fetchOAuthToken]: Ошибка - дублирующий запрос с кодом \(code)")
+                completion(.failure(AuthServiceError.invalidRequest))
+                return
+            }
+            currentTask.cancel()
+        }
+        
+        lastCode = code
+        isFetching = true
+        
+        guard let request = makeOAuthTokenRequest(code: code) else {
+            print("[fetchOAuthToken]: Ошибка - неверный запрос")
+            completion(.failure(AuthServiceError.invalidRequest))
+            return
+        }
+        
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                
+                defer {
+                    self.isFetching = false
+                    self.task = nil
+                    self.lastCode = nil
+                }
+                
+                switch result {
+                case .success(let oAuthTokenResponseBody):
+                    self.authToken = oAuthTokenResponseBody.accessToken
+                    OAuth2TokenStorage.shared.token = oAuthTokenResponseBody.accessToken
+                    completion(.success(oAuthTokenResponseBody.accessToken))
+                case .failure(let error):
+                    print("[fetchOAuthToken]: Ошибка - \(error.localizedDescription)")
+                    completion(.failure(error))
+                }
+            }
+        }
+        
+        self.task = task
+        task.resume()
+    }
+    
+    // MARK: - Private Methods
+    private func makeOAuthTokenRequest(code: String) -> URLRequest? {
         guard let baseURL = URL(string: "https://unsplash.com") else {
-            print("Ошибка: невозможно создать baseURL")
+            print("[makeOAuthTokenRequest]: Ошибка - Невозможно создать baseURL")
             return nil
         }
         
@@ -39,61 +101,12 @@ final class OAuth2Servise {
             + "&&grant_type=authorization_code",
             relativeTo: baseURL
         ) else {
-            print("[makeOAuthTokenRequest]: Невозможно создать URL для запроса")
+            print("[makeOAuthTokenRequest]: Ошибка - Невозможно создать URL для запроса")
             return nil
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        request.httpMethod = HttpMethodsConstants.httpMethodPost
         return request
-    }
-    
-   // MARK: - Fetch token
-    func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        assert(Thread.isMainThread)
-        
-        guard lastCode != code else {
-            print("[fetchOAuthToken]: InvalidRequest - код уже использовался")
-            completion(.failure(AuthServiceError.invalidRequest))
-            return
-        }
-        
-        task?.cancel()
-        lastCode = code
-        
-        guard let request = makeOAuthTokenRequest(code: code) else {
-            print("[fetchOAuthToken]: InvalidRequest - не удалось создать URLRequest")
-            DispatchQueue.main.async {
-                completion(.failure(AuthServiceError.invalidRequest))
-            }
-            return
-        }
-        
-        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
-            DispatchQueue.main.async {
-                guard let self else { return }
-                
-                switch result {
-                case .success(let oAuthTokenResponseBody):
-                    self.authToken = oAuthTokenResponseBody.accessToken
-                    OAuth2TokenStorage.shared.token = oAuthTokenResponseBody.accessToken
-                    completion(.success(oAuthTokenResponseBody.accessToken))
-                    
-                case .failure(let error):
-                    if let networkError = error as? NetworkError {
-                        print("[fetchOAuthToken]: \(networkError.errorDescription ?? "Unknown error")")
-                    } else {
-                        print("[fetchOAuthToken]: \(error.localizedDescription)")
-                    }
-                    completion(.failure(error))
-                }
-                
-                self.task = nil
-                self.lastCode = nil
-            }
-        }
-        
-        self.task = task
-        task.resume()
     }
 }

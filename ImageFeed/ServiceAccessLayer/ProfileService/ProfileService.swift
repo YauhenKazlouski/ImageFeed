@@ -11,42 +11,26 @@ final class ProfileService {
     static let shared = ProfileService()
     private init() {}
     
-    private let oAuthTokenStorage = OAuth2TokenStorage.shared
     private var task: URLSessionTask?
     private(set) var profile: Profile?
     private var isFetching: Bool = false
     
-    func makeProfileRequest(token: String) -> URLRequest? {
+    func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
+        guard !isFetching else {
+            print("[fetchProfile]: Ошибка - запрос уже выполняется")
+            return
+        }
+        
         guard let url = URL(string: "/me", relativeTo: Constants.defaultBaseURL) else {
-            print("[makeProfileRequest]: Ошибка: невозможно создать URL для запроса")
-            return nil
+            print("[fetchProfile]: Ошибка - неверный URL")
+            completion(.failure(AuthServiceError.invalidRequest))
+            isFetching = false
+            return
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        return request
-    }
-    
-    func fetchProfile(completion: @escaping (Result<Profile, Error>) -> Void) {
-        guard !isFetching else {
-            print("[fetchProfile]: FetchingInProgress - запрос уже выполняется")
-            return
-        }
-        
-        guard let token = oAuthTokenStorage.token else {
-            print("[fetchProfile]: MissingToken - токен отсутствует")
-            completion(.failure(AuthServiceError.missingToken))
-            return
-        }
-        
-        guard let request = makeProfileRequest(token: token) else {
-            print("[fetchProfile]: InvalidRequest - не удалось создать URLRequest")
-            DispatchQueue.main.async {
-                completion(.failure(AuthServiceError.invalidRequest))
-            }
-            return
-        }
+        request.setValue("Bearer \(token)", forHTTPHeaderField: HttpMethodsConstants.forHTTPHeaderField)
+        request.httpMethod = HttpMethodsConstants.httpMethodGet
         
         isFetching = true
         task?.cancel()
@@ -64,12 +48,19 @@ final class ProfileService {
                         loginName: "@\(profileResult.username)",
                         bio: profileResult.bio
                     )
-                    
                     self.profile = profile
                     completion(.success(profile))
                     
+                    ProfileImageService.shared.fetchProfileImageURL(username: profileResult.username) { result in
+                        switch result {
+                        case .success(let avatarURL):
+                            print("[fetchProfile]: Аватар успешно загружен: \(avatarURL)")
+                        case .failure(let error):
+                            print("[fetchProfile]: Ошибка загрузки аватара: \(error.localizedDescription)")
+                        }
+                    }
                 case .failure(let error):
-                    print("[fetchProfile]: \(error.localizedDescription)")
+                    print("[fetchProfile]: Ошибка - \(error.localizedDescription)")
                     completion(.failure(error))
                 }
             }
@@ -77,5 +68,12 @@ final class ProfileService {
         
         self.task = task
         task.resume()
+    }
+    
+    func reset() {
+        profile = nil
+        task?.cancel()
+        task = nil
+        isFetching = false
     }
 }

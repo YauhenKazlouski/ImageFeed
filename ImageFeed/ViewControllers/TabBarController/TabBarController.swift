@@ -8,27 +8,36 @@
 import UIKit
 
 final class TabBarController: UITabBarController {
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let storyboard = UIStoryboard(name: "Main", bundle: .main)
-        
-        let imagesListViewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController")
+        let imagesListViewController = ImagesListViewController()
+        let imagesListNavigationController = UINavigationController(rootViewController: imagesListViewController)
+        imagesListNavigationController.tabBarItem = UITabBarItem(
+            title: "",
+            image: UIImage(named: "tab_editorial_active"),
+            selectedImage: nil
+        )
         
         let profileViewController = ProfileViewController()
-        profileViewController.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "tab_profile_active"), selectedImage: nil)
+        profileViewController.tabBarItem = UITabBarItem(
+            title: "",
+            image: UIImage(named: "tab_profile_active"),
+            selectedImage: nil
+        )
         
-        self.viewControllers = [imagesListViewController, profileViewController]
+        self.viewControllers = [imagesListNavigationController, profileViewController]
         
-        setupTabBar()
+        setupTabBarAppearance()
     }
     
-    private func setupTabBar() {
-        tabBar.barTintColor = .ypBlack
+    // MARK: - Private methods
+    private func setupTabBarAppearance() {
+        tabBar.barTintColor = UIColor(named: "YP Black")
         tabBar.isTranslucent = false
-        tabBar.tintColor = .ypWhite
-        tabBar.unselectedItemTintColor = .ypGray
-        view.backgroundColor = .ypBlack
+        tabBar.tintColor = .white
+        tabBar.unselectedItemTintColor = UIColor(named: "YP Gray")
+        
+        view.backgroundColor = UIColor(named: "YP Black")
     }
 }

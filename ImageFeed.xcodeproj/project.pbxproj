@@ -12,8 +12,15 @@
 		27859B2C2D8C163C007C5108 /* OAuthTokenResponseBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27859B2B2D8C163C007C5108 /* OAuthTokenResponseBody.swift */; };
 		27859B2E2D8C16D5007C5108 /* ProfileResponseBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27859B2D2D8C16D5007C5108 /* ProfileResponseBody.swift */; };
 		27859B302D8C17C5007C5108 /* ProfileImageResponseBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27859B2F2D8C17C5007C5108 /* ProfileImageResponseBody.swift */; };
+		279716852DA2523500A97BCD /* ImagesListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279716842DA2523500A97BCD /* ImagesListService.swift */; };
+		279716872DA2525100A97BCD /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279716862DA2525100A97BCD /* Photo.swift */; };
+		279716892DA2538F00A97BCD /* UrlsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279716882DA2538F00A97BCD /* UrlsResult.swift */; };
+		2797168B2DA2540200A97BCD /* PhotoResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2797168A2DA2540200A97BCD /* PhotoResult.swift */; };
+		279716912DA2804800A97BCD /* ImagesListCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279716902DA2804800A97BCD /* ImagesListCellDelegate.swift */; };
 		279A141E2D8AE3F9003266DB /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A141D2D8AE3F9003266DB /* TabBarController.swift */; };
 		27B8326E2D5CDC050053F5C0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B8326D2D5CDC050053F5C0 /* ProfileViewController.swift */; };
+		27B8D6B12DA2C22B00988F57 /* ProfileLogoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B8D6B02DA2C22B00988F57 /* ProfileLogoutService.swift */; };
+		27B8D6B32DA40F1400988F57 /* HttpMethodsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B8D6B22DA40F1400988F57 /* HttpMethodsModel.swift */; };
 		27D22FA32D5CFFF8005F7EE3 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D22FA22D5CFFF8005F7EE3 /* SingleImageViewController.swift */; };
 		27DA5DC72D64D9B500D8D997 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DA5DC62D64D9B500D8D997 /* Constants.swift */; };
 		27DA5DCA2D735DE600D8D997 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DA5DC92D735DE600D8D997 /* AuthViewController.swift */; };
@@ -31,7 +38,6 @@
 		7C84EEFD2D4272650010ACD5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84EEFC2D4272650010ACD5 /* AppDelegate.swift */; };
 		7C84EEFF2D4272650010ACD5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84EEFE2D4272650010ACD5 /* SceneDelegate.swift */; };
 		7C84EF012D4272650010ACD5 /* ImagesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84EF002D4272650010ACD5 /* ImagesListViewController.swift */; };
-		7C84EF042D4272650010ACD5 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 7C84EF032D4272650010ACD5 /* Base */; };
 		7C84EF062D4272670010ACD5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C84EF052D4272670010ACD5 /* Assets.xcassets */; };
 		7C84EF092D4272670010ACD5 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 7C84EF082D4272670010ACD5 /* Base */; };
 		7CD79A542D590EA300DD4651 /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD79A532D590EA300DD4651 /* ImagesListCell.swift */; };
@@ -42,8 +48,15 @@
 		27859B2B2D8C163C007C5108 /* OAuthTokenResponseBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthTokenResponseBody.swift; sourceTree = "<group>"; };
 		27859B2D2D8C16D5007C5108 /* ProfileResponseBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileResponseBody.swift; sourceTree = "<group>"; };
 		27859B2F2D8C17C5007C5108 /* ProfileImageResponseBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageResponseBody.swift; sourceTree = "<group>"; };
+		279716842DA2523500A97BCD /* ImagesListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListService.swift; sourceTree = "<group>"; };
+		279716862DA2525100A97BCD /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		279716882DA2538F00A97BCD /* UrlsResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlsResult.swift; sourceTree = "<group>"; };
+		2797168A2DA2540200A97BCD /* PhotoResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoResult.swift; sourceTree = "<group>"; };
+		279716902DA2804800A97BCD /* ImagesListCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCellDelegate.swift; sourceTree = "<group>"; };
 		279A141D2D8AE3F9003266DB /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		27B8326D2D5CDC050053F5C0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		27B8D6B02DA2C22B00988F57 /* ProfileLogoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileLogoutService.swift; sourceTree = "<group>"; };
+		27B8D6B22DA40F1400988F57 /* HttpMethodsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpMethodsModel.swift; sourceTree = "<group>"; };
 		27D22FA22D5CFFF8005F7EE3 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
 		27DA5DC62D64D9B500D8D997 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		27DA5DC92D735DE600D8D997 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
@@ -60,7 +73,6 @@
 		7C84EEFC2D4272650010ACD5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C84EEFE2D4272650010ACD5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		7C84EF002D4272650010ACD5 /* ImagesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListViewController.swift; sourceTree = "<group>"; };
-		7C84EF032D4272650010ACD5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7C84EF052D4272670010ACD5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7C84EF082D4272670010ACD5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7C84EF0A2D4272670010ACD5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -95,6 +107,10 @@
 				27859B2B2D8C163C007C5108 /* OAuthTokenResponseBody.swift */,
 				27859B2F2D8C17C5007C5108 /* ProfileImageResponseBody.swift */,
 				27859B2D2D8C16D5007C5108 /* ProfileResponseBody.swift */,
+				279716862DA2525100A97BCD /* Photo.swift */,
+				279716882DA2538F00A97BCD /* UrlsResult.swift */,
+				2797168A2DA2540200A97BCD /* PhotoResult.swift */,
+				27B8D6B22DA40F1400988F57 /* HttpMethodsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -119,6 +135,14 @@
 				27859B312D8CB375007C5108 /* TabBarController */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		279716832DA2520400A97BCD /* ImagesListService */ = {
+			isa = PBXGroup;
+			children = (
+				279716842DA2523500A97BCD /* ImagesListService.swift */,
+			);
+			path = ImagesListService;
 			sourceTree = "<group>";
 		};
 		27D464DA2D75AF0C0057C65F /* OAuth2 */ = {
@@ -174,6 +198,7 @@
 		27DA5DE12D74D9ED00D8D997 /* ServiceAccessLayer */ = {
 			isa = PBXGroup;
 			children = (
+				279716832DA2520400A97BCD /* ImagesListService */,
 				27D464DA2D75AF0C0057C65F /* OAuth2 */,
 				27F074192D86E282003DF570 /* ProfileService */,
 			);
@@ -185,6 +210,7 @@
 			children = (
 				27DA5DE32D74DAAF00D8D997 /* AuthViewControllerDelegate.swift */,
 				27DA5DCE2D73840F00D8D997 /* WebViewControllerDelegate.swift */,
+				279716902DA2804800A97BCD /* ImagesListCellDelegate.swift */,
 			);
 			path = Delegates;
 			sourceTree = "<group>";
@@ -194,6 +220,7 @@
 			children = (
 				27F0741C2D884086003DF570 /* ProfileImageService.swift */,
 				27F0741A2D86E2B5003DF570 /* ProfileService.swift */,
+				27B8D6B02DA2C22B00988F57 /* ProfileLogoutService.swift */,
 			);
 			path = ProfileService;
 			sourceTree = "<group>";
@@ -245,7 +272,6 @@
 			children = (
 				7C84EF002D4272650010ACD5 /* ImagesListViewController.swift */,
 				7CD79A532D590EA300DD4651 /* ImagesListCell.swift */,
-				7C84EF022D4272650010ACD5 /* Main.storyboard */,
 			);
 			path = ImagesList;
 			sourceTree = "<group>";
@@ -320,7 +346,6 @@
 			files = (
 				7C84EF062D4272670010ACD5 /* Assets.xcassets in Resources */,
 				7C84EF092D4272670010ACD5 /* Base in Resources */,
-				7C84EF042D4272650010ACD5 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,7 +356,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				279716872DA2525100A97BCD /* Photo.swift in Sources */,
 				27DA5DD42D74B34900D8D997 /* OAuth2TokenStorage.swift in Sources */,
+				279716912DA2804800A97BCD /* ImagesListCellDelegate.swift in Sources */,
+				279716852DA2523500A97BCD /* ImagesListService.swift in Sources */,
 				27DA5DDB2D74CC3800D8D997 /* URLSession+data.swift in Sources */,
 				7C84EF012D4272650010ACD5 /* ImagesListViewController.swift in Sources */,
 				27DA5DE42D74DAAF00D8D997 /* AuthViewControllerDelegate.swift in Sources */,
@@ -340,6 +368,7 @@
 				27859B302D8C17C5007C5108 /* ProfileImageResponseBody.swift in Sources */,
 				27DA5DDE2D74D29200D8D997 /* SplashViewController.swift in Sources */,
 				27F0741B2D86E2B5003DF570 /* ProfileService.swift in Sources */,
+				27B8D6B32DA40F1400988F57 /* HttpMethodsModel.swift in Sources */,
 				277E91362D85C8A40081EB05 /* UIBlocingProgressHUD.swift in Sources */,
 				27B8326E2D5CDC050053F5C0 /* ProfileViewController.swift in Sources */,
 				7C84EEFD2D4272650010ACD5 /* AppDelegate.swift in Sources */,
@@ -350,8 +379,11 @@
 				27D22FA32D5CFFF8005F7EE3 /* SingleImageViewController.swift in Sources */,
 				27DA5DCC2D736B6A00D8D997 /* WebViewViewController.swift in Sources */,
 				27F0741D2D884086003DF570 /* ProfileImageService.swift in Sources */,
+				2797168B2DA2540200A97BCD /* PhotoResult.swift in Sources */,
 				7C84EEFF2D4272650010ACD5 /* SceneDelegate.swift in Sources */,
 				27859B2E2D8C16D5007C5108 /* ProfileResponseBody.swift in Sources */,
+				27B8D6B12DA2C22B00988F57 /* ProfileLogoutService.swift in Sources */,
+				279716892DA2538F00A97BCD /* UrlsResult.swift in Sources */,
 				27DA5DD22D74A4C100D8D997 /* OAuth2Serviсe.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -359,14 +391,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		7C84EF022D4272650010ACD5 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				7C84EF032D4272650010ACD5 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		7C84EF072D4272670010ACD5 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -509,7 +533,6 @@
 				INFOPLIST_FILE = ImageFeed/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -540,7 +563,6 @@
 				INFOPLIST_FILE = ImageFeed/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
