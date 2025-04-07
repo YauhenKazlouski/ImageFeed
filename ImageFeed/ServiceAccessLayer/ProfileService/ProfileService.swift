@@ -29,8 +29,8 @@ final class ProfileService {
         }
         
         var request = URLRequest(url: url)
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: HttpMethodsConstants.forHTTPHeaderField)
+        request.httpMethod = HttpMethodsConstants.httpMethodGet
         
         isFetching = true
         task?.cancel()

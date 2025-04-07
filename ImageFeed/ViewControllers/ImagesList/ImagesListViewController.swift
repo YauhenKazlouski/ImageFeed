@@ -107,7 +107,7 @@ final class ImagesListViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return photos.count
+        photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -147,7 +147,7 @@ extension ImagesListViewController: UITableViewDelegate {
         let imageWidth = photo.size.width
         let scale = imageViewWidth / imageWidth
         let cellHeight = photo.size.height * scale + imageInsets.top + imageInsets.bottom
-                
+        
         return cellHeight
     }
     

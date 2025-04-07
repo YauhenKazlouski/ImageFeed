@@ -15,7 +15,7 @@ final class ProfileImageService {
     private(set) var avatarURL: String?
     private var isFetching: Bool = false
     private var task: URLSessionTask?
-    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
+    static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     private let urlSession = URLSession.shared
     
     private func makeProfileImageRequest(username: String, token: String) -> URLRequest? {
@@ -24,8 +24,8 @@ final class ProfileImageService {
             return nil
         }
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = HttpMethodsConstants.httpMethodGet
+        request.setValue("Bearer \(token)", forHTTPHeaderField: HttpMethodsConstants.forHTTPHeaderField)
         return request
     }
     

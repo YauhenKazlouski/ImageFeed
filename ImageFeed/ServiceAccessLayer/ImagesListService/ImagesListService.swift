@@ -47,8 +47,8 @@ final class ImagesListService {
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = HttpMethodsConstants.httpMethodGet
+        request.setValue("Bearer \(token)", forHTTPHeaderField: HttpMethodsConstants.forHTTPHeaderField)
         return request
     }
     
@@ -77,13 +77,7 @@ final class ImagesListService {
             switch result {
             case .success(let photoResult):
                 let newPhotos = photoResult.map { photoResult in
-                    Photo(id: photoResult.id,
-                          size: CGSize(width: photoResult.width, height: photoResult.height),
-                          createAt: self.dateFormatter.date(from: photoResult.createdAt),
-                          welcomeDescription: photoResult.description,
-                          thumbImageURL: photoResult.urls.thumb,
-                          largeImageURL: photoResult.urls.full,
-                          isLiked: photoResult.likedByUser)
+                    Photo(from: photoResult)
                 }
                 
                 DispatchQueue.main.async {
@@ -108,8 +102,8 @@ final class ImagesListService {
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = isLike ? "POST" : "DELETE"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = isLike ? HttpMethodsConstants.httpMethodPost : HttpMethodsConstants.httpMethodDelete
+        request.setValue("Bearer \(token)", forHTTPHeaderField: HttpMethodsConstants.forHTTPHeaderField)
         return request
     }
     
