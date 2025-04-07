@@ -17,7 +17,6 @@ final class ImagesListService {
     private var lastLoadedPage: Int?
     private var task: URLSessionTask?
     private let perPage = 10
-    private let dateFormatter = ISO8601DateFormatter()
     private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     private let urlSession = URLSession.shared
     private var isFetching: Bool = false
