@@ -182,7 +182,7 @@ extension ImagesListViewController: ImagesListCellDelegate {
     }
 }
 
-//MARK: - setConstraints
+//MARK: - Constraints
 extension ImagesListViewController {
     private func setConstraints() {
         NSLayoutConstraint.activate([

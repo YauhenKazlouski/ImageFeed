@@ -24,8 +24,8 @@ final class AuthViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Войти", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        button.setTitleColor(UIColor(named: "YP Black"), for: .normal)
-        button.backgroundColor = UIColor(named: "YP White")
+        button.setTitleColor(.ypBlack, for: .normal)
+        button.backgroundColor = .ypWhite
         button.layer.cornerRadius = 16
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
@@ -40,7 +40,7 @@ final class AuthViewController: UIViewController {
     
     // MARK: - Private Methods
     private func setupView() {
-        view.backgroundColor = UIColor(named: "YP Black")
+        view.backgroundColor = .ypBlack
         
         [logoImageView, loginButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -50,8 +50,25 @@ final class AuthViewController: UIViewController {
         setConstraints()
     }
     
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так",
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Ок", style: .default) { _ in
+            self.didTapLoginButton()
+        })
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    //MARK: - Actions
     @objc private func didTapLoginButton() {
         let webViewViewController = WebViewViewController()
+        let webViewPresenter = WebViewPresenter()
+        webViewViewController.presenter = webViewPresenter
+        webViewPresenter.view = webViewViewController
+        
         webViewViewController.delegate = self
         let navigationController = UINavigationController(rootViewController: webViewViewController)
         navigationController.modalPresentationStyle = .fullScreen
@@ -85,21 +102,9 @@ extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         vc.dismiss(animated: true)
     }
-    
-    private func showErrorAlert(message: String) {
-        let alert = UIAlertController(
-            title: "Что-то пошло не так",
-            message: message,
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "Ок", style: .default) { _ in
-            self.didTapLoginButton()
-        })
-        self.present(alert, animated: true, completion: nil)
-    }
 }
 
-//MARK: - set
+//MARK: - Constraints
 extension AuthViewController {
     private func setConstraints() {
         NSLayoutConstraint.activate([

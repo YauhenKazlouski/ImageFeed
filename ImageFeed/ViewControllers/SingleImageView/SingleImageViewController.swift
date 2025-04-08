@@ -9,8 +9,16 @@ import UIKit
 import Kingfisher
 
 final class SingleImageViewController: UIViewController {
+    // MARK: - Public Properties
+    var imageURL: String? {
+        didSet{
+            guard isViewLoaded else { return }
+            loadImage()
+        }
+    }
+    
     // MARK: - Private Properties
-    var image: UIImage? {
+    private var image: UIImage? {
         didSet {
             guard isViewLoaded, let image else { return }
             updateImage(image)
@@ -41,12 +49,7 @@ final class SingleImageViewController: UIViewController {
         return shareButton
     }()
     
-    var imageURL: String? {
-        didSet{
-            guard isViewLoaded else { return }
-            loadImage()
-        }
-    }
+    
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -117,7 +120,7 @@ final class SingleImageViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        let backButtonImage = UIImage(named: "nav_back_button")?.withRenderingMode(.alwaysOriginal)
+        let backButtonImage = UIImage(named: "nav_back_button")
         let backButton = UIBarButtonItem(
             image: backButtonImage,
             style: .plain,
@@ -195,7 +198,7 @@ extension SingleImageViewController: UIGestureRecognizerDelegate {
     }
 }
 
-//MARK: - setConstraints
+//MARK: - Constraints
 extension SingleImageViewController {
     private func setConstraints() {
         NSLayoutConstraint.activate([
