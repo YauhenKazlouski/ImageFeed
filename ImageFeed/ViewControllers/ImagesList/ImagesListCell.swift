@@ -84,7 +84,7 @@ final class ImagesListCell: UITableViewCell {
         likeButton.setImage(likeImage, for: .normal)
     }
     
-    // MARK: - Private functions
+    // MARK: - Private methods
     private func setupView() {
         [cellImage, likeButton, dateLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
