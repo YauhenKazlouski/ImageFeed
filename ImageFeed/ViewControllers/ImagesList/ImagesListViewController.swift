@@ -7,8 +7,7 @@
 
 import UIKit
 
-final class ImagesListViewController: UIViewController {
-    
+final class ImagesListViewController: UIViewController, ImagesListViewControllerProtocol {
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .ypBlack
@@ -19,32 +18,50 @@ final class ImagesListViewController: UIViewController {
         return tableView
     }()
     
-    private let photosName: [String] = Array(0..<20).map{ "\($0)" }
-    private var photos: [Photo] = []
-    private let imagesListService = ImagesListService.shared
-    private var imagesListServiceObserver: NSObjectProtocol?
-    
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter
-    }()
+    var presenter: ImagesListPresenterProtocol = ImagesListPresenter()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter.view = self
         
         setupView()
-        setupNotificationObserver()
-        loadPhotos()
+        presenter.viewDidLoad()
     }
     
-    deinit {
-        imagesListServiceObserver.map { NotificationCenter.default.removeObserver($0) }
+    //MARK: - Public Methods
+    func updateTableViewAnimated() {
+        tableView.reloadData()
     }
     
-    // MARK: - Private functions
+    func showLikeAlert(_ error: any Error) {
+        let alert = UIAlertController(
+                    title: "Ошибка",
+                    message: "Не удалось поставить лайк",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                present(alert, animated: true)
+    }
+    
+    func showImageAlert() {
+        let alert = UIAlertController(
+                    title: "Ошибка",
+                    message: "Некорректная ссылка на изображение",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                present(alert, animated: true)
+    }
+    
+    func performBatchUpdates(oldCount: Int, newCount: Int) {
+        tableView.performBatchUpdates {
+                    let indexPath = (oldCount..<newCount).map { IndexPath(row: $0, section: 0) }
+                    tableView.insertRows(at: indexPath, with: .automatic)
+                } completion: { _ in }
+    }
+    
+    // MARK: - Private Methods
     private func setupView() {
         view.addSubview(tableView)
         setConstraints()
@@ -52,62 +69,12 @@ final class ImagesListViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
     }
-    
-    private func loadPhotos() {
-        UIBlocingProgressHUD.show()
-        
-        if imagesListService.photos.isEmpty {
-            imagesListService.fetchPhotosNextPage()
-            UIBlocingProgressHUD.dismiss()
-        } else {
-            photos = imagesListService.photos
-            tableView.reloadData()
-            UIBlocingProgressHUD.dismiss()
-        }
-    }
-    
-    private func setupNotificationObserver() {
-        imagesListServiceObserver = NotificationCenter.default.addObserver(
-            forName: ImagesListService.didChangeNotification,
-            object: nil,
-            queue: .main) { [weak self] _ in
-                self?.updateTableViewAnimated()
-            }
-    }
-    
-    private func updateTableViewAnimated() {
-        let oldCount = photos.count
-        let newCount = imagesListService.photos.count
-        photos = imagesListService.photos
-        
-        if oldCount != newCount {
-            tableView.performBatchUpdates {
-                let indexPath = (oldCount..<newCount).map { IndexPath(row: $0, section: 0) }
-                tableView.insertRows(at: indexPath, with: .automatic)
-            } completion: { _ in }
-        }
-    }
-    
-    private func showLikeAlert(_ error: Error) {
-        let alert = UIAlertController(title: "Ошибка",
-                                      message: "Не удалось поставить лайк",
-                                      preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
-    
-    private func showImageAlert() {
-        let alert = UIAlertController(title: "Ошибка", message: "Некорректная ссылка на изображение", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
 }
 
 // MARK: - UITableViewDataSource
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        photos.count
+        presenter.photosCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -115,9 +82,10 @@ extension ImagesListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let photo = photos[indexPath.row]
-        cell.configure(with: photo, using: dateFormatter)
-        cell.delegate = self
+        if let photo = presenter.photo(at: indexPath.row) {
+            cell.configure(with: photo, using: presenter.dateFormatter)
+            cell.delegate = self
+        }
         return cell
     }
 }
@@ -127,7 +95,7 @@ extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let photo = photos[indexPath.row]
+        guard let photo = presenter.photo(at: indexPath.row) else { return }
         guard photo.isValidLargeURL else {
             showImageAlert()
             return
@@ -141,44 +109,37 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let photo = photos[indexPath.row]
-        let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
-        let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
-        let imageWidth = photo.size.width
-        let scale = imageViewWidth / imageWidth
-        let cellHeight = photo.size.height * scale + imageInsets.top + imageInsets.bottom
+        guard let photo = presenter.photo(at: indexPath.row) else { return 0 }
+        return presenter.calculateCellHeight(for: photo, tableViewWidth: tableView.bounds.width)
         
-        return cellHeight
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == photos.count - 1 {
-            imagesListService.fetchPhotosNextPage()
+        if indexPath.row == presenter.photosCount - 1 {
+            presenter.fetchPhotosNextPageIfNeeded()
         }
     }
 }
 
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
-        guard let indexPath = tableView.indexPath(for: cell) else { return }
-        let photo = photos[indexPath.row]
+        guard let indexPath = tableView.indexPath(for: cell),
+              let photo = presenter.photo(at: indexPath.row) else { return }
         
-        imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
-            DispatchQueue.main.async {
-                guard let self else { return }
-                switch result {
-                case .success:
-                    if let index  = self.tableView.indexPath(for: cell),
-                       let newPhoto = self.imagesListService.photos.first(where: { $0.id == photo.id }) {
-                        self.photos[index.row] = newPhoto
-                        cell.setIsLiked(newPhoto.isLiked)
+        presenter.changeLike(for: photo.id, isLike: !photo.isLiked) { [weak self] result in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success:
+                            if let newPhoto = self?.presenter.photo(at: indexPath.row) {
+                                cell.setIsLiked(newPhoto.isLiked)
+                            }
+                        case .failure(let error):
+                            self?.showLikeAlert(error)
+                            cell.setIsLiked(photo.isLiked)
+                        }
                     }
-                case .failure(let error):
-                    self.showLikeAlert(error)
-                    cell.setIsLiked(photo.isLiked)
                 }
-            }
-        }
+        
     }
 }
 

@@ -19,6 +19,10 @@
 		2750D69D2DAA8BD600D30B6C /* ProfileViewControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2750D69C2DAA8BD600D30B6C /* ProfileViewControllerSpy.swift */; };
 		2750D69F2DAA8E2F00D30B6C /* ProfilePresenterSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2750D69E2DAA8E2F00D30B6C /* ProfilePresenterSpy.swift */; };
 		2750D6A12DAA8F9900D30B6C /* ProfilePresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2750D6A02DAA8F9900D30B6C /* ProfilePresenterTests.swift */; };
+		276B04E72DAAEB7E00CF1375 /* ImagesListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276B04E62DAAEB7E00CF1375 /* ImagesListPresenter.swift */; };
+		276B04E92DAAF63C00CF1375 /* ImagesListServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276B04E82DAAF63C00CF1375 /* ImagesListServiceProtocol.swift */; };
+		276B04EB2DAAF66E00CF1375 /* ImagesListViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276B04EA2DAAF66E00CF1375 /* ImagesListViewControllerProtocol.swift */; };
+		276B04ED2DAAF6A800CF1375 /* ImagesListPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276B04EC2DAAF6A800CF1375 /* ImagesListPresenterProtocol.swift */; };
 		277E91342D7C4EDE0081EB05 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 277E91332D7C4EDE0081EB05 /* ProgressHUD */; };
 		277E91362D85C8A40081EB05 /* UIBlocingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277E91352D85C8A30081EB05 /* UIBlocingProgressHUD.swift */; };
 		27859B2C2D8C163C007C5108 /* OAuthTokenResponseBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27859B2B2D8C163C007C5108 /* OAuthTokenResponseBody.swift */; };
@@ -87,6 +91,10 @@
 		2750D69C2DAA8BD600D30B6C /* ProfileViewControllerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewControllerSpy.swift; sourceTree = "<group>"; };
 		2750D69E2DAA8E2F00D30B6C /* ProfilePresenterSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenterSpy.swift; sourceTree = "<group>"; };
 		2750D6A02DAA8F9900D30B6C /* ProfilePresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenterTests.swift; sourceTree = "<group>"; };
+		276B04E62DAAEB7E00CF1375 /* ImagesListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListPresenter.swift; sourceTree = "<group>"; };
+		276B04E82DAAF63C00CF1375 /* ImagesListServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListServiceProtocol.swift; sourceTree = "<group>"; };
+		276B04EA2DAAF66E00CF1375 /* ImagesListViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListViewControllerProtocol.swift; sourceTree = "<group>"; };
+		276B04EC2DAAF6A800CF1375 /* ImagesListPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListPresenterProtocol.swift; sourceTree = "<group>"; };
 		277E91352D85C8A30081EB05 /* UIBlocingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlocingProgressHUD.swift; sourceTree = "<group>"; };
 		27859B2B2D8C163C007C5108 /* OAuthTokenResponseBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthTokenResponseBody.swift; sourceTree = "<group>"; };
 		27859B2D2D8C16D5007C5108 /* ProfileResponseBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileResponseBody.swift; sourceTree = "<group>"; };
@@ -177,6 +185,38 @@
 			path = ProfileViewTests;
 			sourceTree = "<group>";
 		};
+		276B04EE2DAAF74D00CF1375 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				27B8D6C02DA5956600988F57 /* WebViewViewControllerProtocol.swift */,
+				27B8D6C22DA5959600988F57 /* WebViewPresenterProtocol.swift */,
+				27B8D6C62DA5CA2800988F57 /* AuthHelperProtocol.swift */,
+			);
+			path = WebView;
+			sourceTree = "<group>";
+		};
+		276B04EF2DAAF77400CF1375 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				2750D68E2DAA7E6500D30B6C /* ProfileViewControllerProtocol.swift */,
+				2750D6902DAA85F700D30B6C /* ProfilePresenterProtocol.swift */,
+				2750D68C2DAA7DF000D30B6C /* ProfileServiceProtocol.swift */,
+				2750D6862DAA7C8B00D30B6C /* ProfileLogoutServiceProtocol.swift */,
+				2750D68A2DAA7D1F00D30B6C /* ProfileImageServiceProtocol.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		276B04F02DAAF79600CF1375 /* ImagesList */ = {
+			isa = PBXGroup;
+			children = (
+				276B04EA2DAAF66E00CF1375 /* ImagesListViewControllerProtocol.swift */,
+				276B04EC2DAAF6A800CF1375 /* ImagesListPresenterProtocol.swift */,
+				276B04E82DAAF63C00CF1375 /* ImagesListServiceProtocol.swift */,
+			);
+			path = ImagesList;
+			sourceTree = "<group>";
+		};
 		27859B312D8CB375007C5108 /* TabBarController */ = {
 			isa = PBXGroup;
 			children = (
@@ -233,14 +273,9 @@
 		27B8D6BF2DA5953700988F57 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				27B8D6C02DA5956600988F57 /* WebViewViewControllerProtocol.swift */,
-				27B8D6C22DA5959600988F57 /* WebViewPresenterProtocol.swift */,
-				27B8D6C62DA5CA2800988F57 /* AuthHelperProtocol.swift */,
-				2750D6862DAA7C8B00D30B6C /* ProfileLogoutServiceProtocol.swift */,
-				2750D68A2DAA7D1F00D30B6C /* ProfileImageServiceProtocol.swift */,
-				2750D68C2DAA7DF000D30B6C /* ProfileServiceProtocol.swift */,
-				2750D68E2DAA7E6500D30B6C /* ProfileViewControllerProtocol.swift */,
-				2750D6902DAA85F700D30B6C /* ProfilePresenterProtocol.swift */,
+				276B04F02DAAF79600CF1375 /* ImagesList */,
+				276B04EF2DAAF77400CF1375 /* Profile */,
+				276B04EE2DAAF74D00CF1375 /* WebView */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -386,6 +421,7 @@
 			children = (
 				7C84EF002D4272650010ACD5 /* ImagesListViewController.swift */,
 				7CD79A532D590EA300DD4651 /* ImagesListCell.swift */,
+				276B04E62DAAEB7E00CF1375 /* ImagesListPresenter.swift */,
 			);
 			path = ImagesList;
 			sourceTree = "<group>";
@@ -533,14 +569,18 @@
 				27DA5DCF2D73840F00D8D997 /* WebViewControllerDelegate.swift in Sources */,
 				27859B302D8C17C5007C5108 /* ProfileImageResponseBody.swift in Sources */,
 				27B8D6BC2DA5777C00988F57 /* WebViewPresenter.swift in Sources */,
+				276B04E72DAAEB7E00CF1375 /* ImagesListPresenter.swift in Sources */,
+				276B04EB2DAAF66E00CF1375 /* ImagesListViewControllerProtocol.swift in Sources */,
 				27B8D6C72DA5CA2800988F57 /* AuthHelperProtocol.swift in Sources */,
 				27B8D6C12DA5956600988F57 /* WebViewViewControllerProtocol.swift in Sources */,
+				276B04ED2DAAF6A800CF1375 /* ImagesListPresenterProtocol.swift in Sources */,
 				27DA5DDE2D74D29200D8D997 /* SplashViewController.swift in Sources */,
 				27F0741B2D86E2B5003DF570 /* ProfileService.swift in Sources */,
 				27B8D6B32DA40F1400988F57 /* HttpMethodsModel.swift in Sources */,
 				277E91362D85C8A40081EB05 /* UIBlocingProgressHUD.swift in Sources */,
 				27B8326E2D5CDC050053F5C0 /* ProfileViewController.swift in Sources */,
 				7C84EEFD2D4272650010ACD5 /* AppDelegate.swift in Sources */,
+				276B04E92DAAF63C00CF1375 /* ImagesListServiceProtocol.swift in Sources */,
 				27DA5DCA2D735DE600D8D997 /* AuthViewController.swift in Sources */,
 				279A141E2D8AE3F9003266DB /* TabBarController.swift in Sources */,
 				27DA5DC72D64D9B500D8D997 /* AuthConfiguration.swift in Sources */,
@@ -589,7 +629,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "ru.praktikum.Image-Feed.ImageFeedTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -607,7 +647,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "ru.praktikum.Image-Feed.ImageFeedTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
