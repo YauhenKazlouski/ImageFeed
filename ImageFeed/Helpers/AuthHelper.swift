@@ -34,7 +34,7 @@ final class AuthHelper: AuthHelperProtocol {
     }
     
     // MARK: - Private methods
-    private func authURL() -> URL? {
+    func authURL() -> URL? {
         guard var urlComponents = URLComponents(string: configuration.authURLString) else { return nil}
         
         urlComponents.queryItems = [

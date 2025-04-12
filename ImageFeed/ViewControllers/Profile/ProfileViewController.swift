@@ -64,7 +64,7 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(named: "YP Black")
+        view.backgroundColor = .ypGray
         
         setupView()
         updateProfileDetails()
@@ -81,6 +81,7 @@ final class ProfileViewController: UIViewController {
         
         updateAvatar()
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
