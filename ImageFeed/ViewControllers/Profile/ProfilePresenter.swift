@@ -10,14 +10,14 @@ import Foundation
 final class ProfilePresenter: ProfilePresenterProtocol {
     
     //MARK: - Public Properties
-    weak var view: ProfileViewControllerProtocol?
+    weak var view: (any ProfileViewControllerProtocol)?
     
     
     //MARK: - Private Properties
     
-    private let profileService: ProfileServiceProtocol
-    private let profileImageService: ProfileImageServiceProtocol
-    private let profileLogoutService: ProfileLogoutServiceProtocol
+     let profileService: ProfileServiceProtocol
+     let profileImageService: ProfileImageServiceProtocol
+     let profileLogoutService: ProfileLogoutServiceProtocol
     
     init(profileService: ProfileServiceProtocol = ProfileService.shared,
          profileImageService: ProfileImageServiceProtocol = ProfileImageService.shared,

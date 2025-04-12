@@ -4,7 +4,6 @@
 //
 //  Created by PandaPo on 12.02.25.
 //
-
 import UIKit
 import Kingfisher
 
@@ -52,8 +51,8 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         return logoutButton
     }()
     
-    private var presenter: ProfilePresenterProtocol?
-  
+    var presenter: ProfilePresenterProtocol? = ProfilePresenter()
+    
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -63,7 +62,6 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         
         setupView()
         
-        presenter = ProfilePresenter()
         presenter?.view = self
         presenter?.viewDidLoad()
     }
@@ -144,5 +142,17 @@ extension ProfileViewController {
             logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             logoutButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
         ])
+    }
+}
+
+extension ProfileViewController {
+    func testableViews() -> (
+        imageView: UIImageView,
+        nameLabel: UILabel,
+        loginNameLabel: UILabel,
+        descriptionLabel: UILabel,
+        logoutButton: UIButton
+    ) {
+        return (imageView, nameLabel, loginNameLabel, descriptionLabel, logoutButton)
     }
 }
