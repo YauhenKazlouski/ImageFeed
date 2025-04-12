@@ -8,12 +8,11 @@
 import UIKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     // MARK: - Private Properties
     private let nameLabel: UILabel = {
         let nameLabel = UILabel()
         nameLabel.text = "Екатерина Новикова"
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.systemFont(ofSize: 23, weight: .semibold)
         nameLabel.textColor = .ypWhite
         return nameLabel
@@ -22,7 +21,6 @@ final class ProfileViewController: UIViewController {
     private let loginNameLabel: UILabel = {
         let loginNameLabel = UILabel()
         loginNameLabel.text = "@ekaterina_nov"
-        loginNameLabel.translatesAutoresizingMaskIntoConstraints = false
         loginNameLabel.font = .systemFont(ofSize: 13)
         loginNameLabel.textColor = .ypGray
         return loginNameLabel
@@ -31,7 +29,6 @@ final class ProfileViewController: UIViewController {
     private let descriptionLabel: UILabel = {
         let descriptionLabel = UILabel()
         descriptionLabel.text = "Hello, World!"
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.font = .systemFont(ofSize: 13)
         descriptionLabel.textColor = .ypWhite
         return descriptionLabel
@@ -40,7 +37,6 @@ final class ProfileViewController: UIViewController {
     private lazy var imageView: UIImageView = {
         let profileImage = UIImage(named: "Photo")
         let imageView = UIImageView(image: profileImage)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 35
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
@@ -56,34 +52,60 @@ final class ProfileViewController: UIViewController {
         return logoutButton
     }()
     
-    private let profileService = ProfileService.shared
-    private var profileImageServiceObserver: NSObjectProtocol?
-    private let profileLogoutService = ProfileLogoutService.shared
+    private var presenter: ProfilePresenterProtocol?
+  
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .ypGray
+        view.backgroundColor = .ypBlack
         
         setupView()
-        updateProfileDetails()
         
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateAvatar()
-            }
-        
-        updateAvatar()
+        presenter = ProfilePresenter()
+        presenter?.view = self
+        presenter?.viewDidLoad()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+    }
+    
+    //MARK: - Public Methods
+    
+    func updateProfileDetails(name: String, loginName: String, bio: String) {
+        nameLabel.text = name
+        loginNameLabel.text = loginName
+        descriptionLabel.text = bio
+    }
+    
+    func updateAvatar(with url: URL) {
+        imageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "placeholderAvatar"),
+            options: [
+                .transition(.fade(0.2)),
+                .processor(DownsamplingImageProcessor(size: CGSize(width: 140, height: 140)))
+            ]
+        )
+    }
+    
+    func showDefaultAvatar() {
+        imageView.image = UIImage(named: "placeholderAvatar")
+    }
+    
+    func showLogoutAlert() {
+        let alert = UIAlertController(title: "Пока, пока!",
+                                      message: "Уверены, что хотите выйти?",
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            self?.presenter?.didTapLogoutButton()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Нет", style: .cancel))
+        present(alert, animated: true)
     }
     
     // MARK: - Private methods
@@ -95,55 +117,9 @@ final class ProfileViewController: UIViewController {
         setConstraints()
     }
     
-    private func updateProfileDetails() {
-        guard let profile = profileService.profile else { return }
-        
-        nameLabel.text = profile.name
-        loginNameLabel.text = profile.loginName
-        descriptionLabel.text = profile.bio
-    }
-    
-    private func updateAvatar() {
-        DispatchQueue.main.async {
-            guard
-                let profileImageURL = ProfileImageService.shared.avatarURL,
-                let url = URL(string: profileImageURL)
-            else {
-                print("Аватар не найден или URL невалиден")
-                return
-            }
-            
-            print("Загружаем аватар по URL: \(url)")
-            
-            self.imageView.kf.setImage(
-                with: url,
-                placeholder: UIImage(named: "placeholderAvatar"),
-                options: [
-                    .transition(.fade(0.2)),
-                    .processor(DownsamplingImageProcessor(size: CGSize(width: 140, height: 140)))
-                ]
-            ) { result in
-                switch result {
-                case .success(let value):
-                    print("Аватар успешно загружен: \(value.source.url?.absoluteString ?? "")")
-                case .failure(let error):
-                    print("Ошибка загрузки аватара: \(error.localizedDescription)")
-                }
-            }
-        }
-    }
-    
     // MARK: - Actions
     @objc private func didTapLogoutButton() {
-        let alert = UIAlertController(title: "Пока, пока!",
-                                      message: "Уверены, что хотите выйти?",
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Да", style: .default) { [weak self] _ in
-            self?.profileLogoutService.logout()
-        })
-        
-        alert.addAction(UIAlertAction(title: "Нет", style: .cancel))
-        present(alert, animated: true)
+        showLogoutAlert()
     }
 }
 
