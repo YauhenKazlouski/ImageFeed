@@ -8,13 +8,11 @@
 import Foundation
 
 final class ProfilePresenter: ProfilePresenterProtocol {
-    
-    //MARK: - Public Properties
+//MARK: - Public Properties
     weak var view: (any ProfileViewControllerProtocol)?
     
     
-    //MARK: - Private Properties
-    
+//MARK: - Private Properties
      let profileService: ProfileServiceProtocol
      let profileImageService: ProfileImageServiceProtocol
      let profileLogoutService: ProfileLogoutServiceProtocol
@@ -27,10 +25,9 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         self.profileLogoutService = profileLogoutService
     }
     
-    //MARK: - Public Methods
-    
+//MARK: - Public Methods
     func viewDidLoad() {
-        updateProfilaDetails()
+        updateProfileDetails()
         updateAvatar()
         setupObserver()
     }
@@ -49,15 +46,14 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         view?.updateAvatar(with: url)
     }
     
-    func updateProfilaDetails() {
+    func updateProfileDetails() {
         guard let profile = profileService.profile else { return }
         view?.updateProfileDetails(name: profile.name,
                                    loginName: profile.loginName,
                                    bio: profile.bio ?? "")
     }
     
-    // MARK: - Private methods
-    
+// MARK: - Private methods
     private func setupObserver() {
         NotificationCenter.default.addObserver(forName: ProfileImageService.didChangeNotification,
                                                object: nil,

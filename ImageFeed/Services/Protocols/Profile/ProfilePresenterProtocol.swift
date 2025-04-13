@@ -13,5 +13,5 @@ protocol ProfilePresenterProtocol: AnyObject {
     func viewDidLoad()
     func didTapLogoutButton()
     func updateAvatar()
-    func updateProfilaDetails()
+    func updateProfileDetails()
 }

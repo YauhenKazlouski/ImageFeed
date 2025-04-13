@@ -39,6 +39,4 @@ final class ProfileViewControllerSpy: ProfileViewControllerProtocol {
     func showLogoutAlert() {
         showLogoutAlertCalled = true
     }
-    
-    
 }

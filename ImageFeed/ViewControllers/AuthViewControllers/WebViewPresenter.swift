@@ -14,7 +14,7 @@ final class WebViewPresenter : WebViewPresenterProtocol {
         self.authHelper = authHelper
     }
     
-    // MARK: - Public methods
+// MARK: - Public methods
     func viewDidLoad() {
         guard let request = authHelper.authRequest() else { return }
         didUpdateProgressValue(0)

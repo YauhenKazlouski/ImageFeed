@@ -23,7 +23,7 @@ final class OAuth2Service {
     
     private init() {}
     
-    // MARK: - Private Properties
+// MARK: - Private Properties
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     private var lastCode: String?
@@ -31,7 +31,7 @@ final class OAuth2Service {
     
     private var isFetching = false
     
-    // MARK: - Fetch OAuth Token
+// MARK: - Fetch OAuth Token
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
         
@@ -85,7 +85,7 @@ final class OAuth2Service {
         task.resume()
     }
     
-    // MARK: - Private Methods
+// MARK: - Private Methods
     private func makeOAuthTokenRequest(code: String) -> URLRequest? {
         guard let baseURL = URL(string: "https://unsplash.com") else {
             print("[makeOAuthTokenRequest]: Ошибка - Невозможно создать baseURL")

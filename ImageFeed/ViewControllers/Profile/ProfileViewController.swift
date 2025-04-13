@@ -8,7 +8,7 @@ import UIKit
 import Kingfisher
 
 final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
-    // MARK: - Private Properties
+// MARK: - Private Properties
     private let nameLabel: UILabel = {
         let nameLabel = UILabel()
         nameLabel.text = "Екатерина Новикова"
@@ -54,7 +54,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     var presenter: ProfilePresenterProtocol? = ProfilePresenter()
     
     
-    // MARK: - Lifecycle
+// MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -70,7 +70,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         super.viewDidAppear(animated)
     }
     
-    //MARK: - Public Methods
+//MARK: - Public Methods
     
     func updateProfileDetails(name: String, loginName: String, bio: String) {
         nameLabel.text = name
@@ -106,7 +106,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         present(alert, animated: true)
     }
     
-    // MARK: - Private methods
+// MARK: - Private methods
     private func setupView() {
         [imageView, nameLabel, loginNameLabel, descriptionLabel, logoutButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -115,7 +115,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         setConstraints()
     }
     
-    // MARK: - Actions
+// MARK: - Actions
     @objc private func didTapLogoutButton() {
         showLogoutAlert()
     }

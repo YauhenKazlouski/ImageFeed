@@ -36,29 +36,29 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
     
     func showLikeAlert(_ error: any Error) {
         let alert = UIAlertController(
-                    title: "Ошибка",
-                    message: "Не удалось поставить лайк",
-                    preferredStyle: .alert
-                )
-                alert.addAction(UIAlertAction(title: "OK", style: .default))
-                present(alert, animated: true)
+            title: "Ошибка",
+            message: "Не удалось поставить лайк",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
     
     func showImageAlert() {
         let alert = UIAlertController(
-                    title: "Ошибка",
-                    message: "Некорректная ссылка на изображение",
-                    preferredStyle: .alert
-                )
-                alert.addAction(UIAlertAction(title: "OK", style: .default))
-                present(alert, animated: true)
+            title: "Ошибка",
+            message: "Некорректная ссылка на изображение",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
     
     func performBatchUpdates(oldCount: Int, newCount: Int) {
         tableView.performBatchUpdates {
-                    let indexPath = (oldCount..<newCount).map { IndexPath(row: $0, section: 0) }
-                    tableView.insertRows(at: indexPath, with: .automatic)
-                } completion: { _ in }
+            let indexPath = (oldCount..<newCount).map { IndexPath(row: $0, section: 0) }
+            tableView.insertRows(at: indexPath, with: .automatic)
+        } completion: { _ in }
     }
     
     // MARK: - Private Methods
@@ -120,25 +120,25 @@ extension ImagesListViewController: UITableViewDelegate {
         }
     }
 }
-
+// MARK: - ImagesListCellDelegate
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell),
               let photo = presenter.photo(at: indexPath.row) else { return }
         
         presenter.changeLike(for: photo.id, isLike: !photo.isLiked) { [weak self] result in
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .success:
-                            if let newPhoto = self?.presenter.photo(at: indexPath.row) {
-                                cell.setIsLiked(newPhoto.isLiked)
-                            }
-                        case .failure(let error):
-                            self?.showLikeAlert(error)
-                            cell.setIsLiked(photo.isLiked)
-                        }
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    if let newPhoto = self?.presenter.photo(at: indexPath.row) {
+                        cell.setIsLiked(newPhoto.isLiked)
                     }
+                case .failure(let error):
+                    self?.showLikeAlert(error)
+                    cell.setIsLiked(photo.isLiked)
                 }
+            }
+        }
         
     }
 }

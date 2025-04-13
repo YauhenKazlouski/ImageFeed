@@ -32,13 +32,13 @@ final class AuthViewController: UIViewController {
         return button
     }()
     
-    // MARK: - Lifecycle
+// MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
     }
     
-    // MARK: - Private Methods
+// MARK: - Private Methods
     private func setupView() {
         view.backgroundColor = .ypBlack
         
@@ -62,7 +62,7 @@ final class AuthViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    //MARK: - Actions
+//MARK: - Actions
     @objc private func didTapLoginButton() {
         let webViewViewController = WebViewViewController()
         let authHelper = AuthHelper()

@@ -9,15 +9,15 @@ import Foundation
 import SwiftKeychainWrapper
 
 final class OAuth2TokenStorage {
-    // MARK: - Singleton
+// MARK: - Singleton
     static let shared = OAuth2TokenStorage()
     
     private init() {}
     
-    // MARK: - Private Properties
+// MARK: - Private Properties
     private let tokenKey = "access_token"
     
-    // MARK: - Token Management
+// MARK: - Token Management
     var token: String? {
         get {
             return KeychainWrapper.standard.string(forKey: tokenKey)

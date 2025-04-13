@@ -8,7 +8,7 @@
 import UIKit
 
 final class ImagesListPresenter: ImagesListPresenterProtocol {
-    // MARK: - Public Properties
+// MARK: - Public Properties
     weak var view: ImagesListViewControllerProtocol?
     
     lazy var dateFormatter: DateFormatter = {
@@ -22,7 +22,7 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
         photos.count
     }
     
-    // MARK: - Private Properties
+// MARK: - Private Properties
     private let imagesListService: ImagesListServiceProtocol
     private var photos: [Photo] = []
     
@@ -32,7 +32,7 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
         setupNotificationObserver()
     }
     
-    // MARK: - Public Methods
+// MARK: - Public Methods
     func viewDidLoad() {
         loadPhotos()
     }
@@ -71,7 +71,7 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
         return cellHeight
     }
     
-    // MARK: - Private Methods
+// MARK: - Private Methods
     private func setupNotificationObserver() {
         NotificationCenter.default.addObserver(
             forName: ImagesListService.didChangeNotification,

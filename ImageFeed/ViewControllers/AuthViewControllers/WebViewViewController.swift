@@ -13,7 +13,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     var presenter: WebViewPresenterProtocol?
     weak var delegate: WebViewViewControllerDelegate?
     
-    //MARK: - Private Properties
+//MARK: - Private Properties
     private var progressObservation: NSKeyValueObservation?
     
     private lazy var webView: WKWebView = {
@@ -29,7 +29,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         return progressView
     }()
     
-    //MARK: - Life cycle
+//MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
@@ -42,17 +42,17 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         setupProgressObservation()
     }
     
-    // MARK: - Override properties
+// MARK: - Override properties
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
     }
     
-    //MARK: - Deinit
+//MARK: - Deinit
     deinit {
         progressObservation?.invalidate()
     }
     
-    //MARK: - Public Methods
+//MARK: - Public Methods
     private func setupProgressObservation() {
         progressObservation = webView.observe(\.estimatedProgress, options: .new) { [weak self] _, _ in
             guard let self else { return }
@@ -72,7 +72,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         progressView.isHidden = isHidden
     }
     
-    // MARK: - Private methods
+// MARK: - Private methods
     private func setupView() {
         [webView, progressView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -102,7 +102,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         }
     }
     
-    //MARK: - Actions
+//MARK: - Actions
     @objc private func didTapBackButton() {
         delegate?.webViewViewControllerDidCancel(self)
     }

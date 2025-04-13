@@ -13,7 +13,7 @@ final class AuthHelper: AuthHelperProtocol {
         self.configuration = configuration
     }
     
-    // MARK: - Public methods
+// MARK: - Public methods
     func authRequest() -> URLRequest? {
         guard let url = authURL() else { return  nil}
         
@@ -33,7 +33,7 @@ final class AuthHelper: AuthHelperProtocol {
         }
     }
     
-    // MARK: - Private methods
+// MARK: - Private methods
     func authURL() -> URL? {
         guard var urlComponents = URLComponents(string: configuration.authURLString) else { return nil}
         
