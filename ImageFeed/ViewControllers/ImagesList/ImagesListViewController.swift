@@ -15,6 +15,7 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         tableView.register(ImagesListCell.self, forCellReuseIdentifier: ImagesListCell.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.accessibilityIdentifier = "tableView"
         return tableView
     }()
     

@@ -48,6 +48,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         logoutButton.setImage(logoutImage, for: .normal)
         logoutButton.tintColor = .ypRed
         logoutButton.addTarget(self, action: #selector(didTapLogoutButton), for: .touchUpInside)
+        logoutButton.accessibilityIdentifier = "logoutButton"
         return logoutButton
     }()
     
@@ -98,12 +99,19 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
                                       message: "Уверены, что хотите выйти?",
                                       preferredStyle: .alert)
         
-        alert.addAction(UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+        let yesAction = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
             self?.presenter?.didTapLogoutButton()
-        })
+        }
+        yesAction.accessibilityIdentifier = "Да"
+        alert.addAction(yesAction)
         
-        alert.addAction(UIAlertAction(title: "Нет", style: .cancel))
-        present(alert, animated: true)
+        let noAction = UIAlertAction(title: "Нет", style: .cancel)
+        noAction.accessibilityIdentifier = "Нет"
+        alert.addAction(noAction)
+        
+        present(alert, animated: true) {
+            alert.view.accessibilityIdentifier = "Пока, пока!"
+        }
     }
     
 // MARK: - Private methods
