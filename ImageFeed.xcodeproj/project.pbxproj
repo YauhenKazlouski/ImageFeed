@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		27478D682DADAA6400D43241 /* AccessibilityIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27478D672DADAA6400D43241 /* AccessibilityIds.swift */; };
+		27478D692DADAE6500D43241 /* AccessibilityIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27478D672DADAA6400D43241 /* AccessibilityIds.swift */; };
 		2750D6852DAA746600D30B6C /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2750D6842DAA746600D30B6C /* ProfilePresenter.swift */; };
 		2750D6872DAA7C8B00D30B6C /* ProfileLogoutServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2750D6862DAA7C8B00D30B6C /* ProfileLogoutServiceProtocol.swift */; };
 		2750D68B2DAA7D1F00D30B6C /* ProfileImageServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2750D68A2DAA7D1F00D30B6C /* ProfileImageServiceProtocol.swift */; };
@@ -92,6 +94,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		27478D672DADAA6400D43241 /* AccessibilityIds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityIds.swift; sourceTree = "<group>"; };
 		2750D6842DAA746600D30B6C /* ProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenter.swift; sourceTree = "<group>"; };
 		2750D6862DAA7C8B00D30B6C /* ProfileLogoutServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileLogoutServiceProtocol.swift; sourceTree = "<group>"; };
 		2750D68A2DAA7D1F00D30B6C /* ProfileImageServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageServiceProtocol.swift; sourceTree = "<group>"; };
@@ -289,9 +292,11 @@
 		27859B332D8CB43B007C5108 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				27DA5DC62D64D9B500D8D997 /* AuthConfiguration.swift */,
 				277E91352D85C8A30081EB05 /* UIBlocingProgressHUD.swift */,
 				27DA5DDA2D74CC3800D8D997 /* URLSession+data.swift */,
 				27B8D6C42DA5CA0A00988F57 /* AuthHelper.swift */,
+				27478D672DADAA6400D43241 /* AccessibilityIds.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -445,7 +450,6 @@
 			children = (
 				7C84EEFC2D4272650010ACD5 /* AppDelegate.swift */,
 				7C84EEFE2D4272650010ACD5 /* SceneDelegate.swift */,
-				27DA5DC62D64D9B500D8D997 /* AuthConfiguration.swift */,
 				27859B332D8CB43B007C5108 /* Helpers */,
 				27859B322D8CB3AF007C5108 /* Models */,
 				7C84EF102D4294580010ACD5 /* Resources */,
@@ -617,6 +621,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				276B05092DABE6F500CF1375 /* ImageFeedUITests.swift in Sources */,
+				27478D692DADAE6500D43241 /* AccessibilityIds.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -660,6 +665,7 @@
 				27DA5DE42D74DAAF00D8D997 /* AuthViewControllerDelegate.swift in Sources */,
 				7CD79A542D590EA300DD4651 /* ImagesListCell.swift in Sources */,
 				27DA5DCF2D73840F00D8D997 /* WebViewControllerDelegate.swift in Sources */,
+				27478D682DADAA6400D43241 /* AccessibilityIds.swift in Sources */,
 				27859B302D8C17C5007C5108 /* ProfileImageResponseBody.swift in Sources */,
 				27B8D6BC2DA5777C00988F57 /* WebViewPresenter.swift in Sources */,
 				276B04E72DAAEB7E00CF1375 /* ImagesListPresenter.swift in Sources */,

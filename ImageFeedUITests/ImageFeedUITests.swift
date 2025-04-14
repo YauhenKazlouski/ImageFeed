@@ -16,14 +16,14 @@ final class ImageFeedUITests: XCTestCase {
     
     override func setUpWithError() throws {
         continueAfterFailure = false
-        
+        app.launchArguments = ["UITEST"]
         app.launch()
     }
     
     func testAuth() throws {
-        app.buttons["Authenticate"].tap()
+        app.buttons[AccessibilityIds.loginButton].tap()
         
-        let webView = app.webViews["UnsplashWebView"]
+        let webView = app.webViews[AccessibilityIds.webWiew]
         XCTAssertTrue(webView.waitForExistence(timeout: 5))
         
         let loginTextField = webView.descendants(matching: .textField).element
@@ -46,31 +46,37 @@ final class ImageFeedUITests: XCTestCase {
         let tablesQuery = app.tables
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
         XCTAssertTrue(cell.waitForExistence(timeout: 10))
-     
     }
     
     func testFeed() throws {
         let tableQuery = app.tables
         let cell = tableQuery.children(matching: .cell).element(boundBy: 0)
+        XCTAssertTrue(cell.waitForExistence(timeout: 10))
         cell.swipeUp()
         
         sleep(2)
         
-        let cellToLike = tableQuery.children(matching: .cell).element(boundBy: 1)
-        cellToLike.buttons["likeButton"].tap()
+        let cellToLike = tableQuery.children(matching: .cell).element(boundBy: 0)
+        XCTAssertTrue(cellToLike.waitForExistence(timeout: 10))
+        
+        let likeButton = cellToLike.buttons[AccessibilityIds.likeButton]
+        XCTAssertTrue(likeButton.waitForExistence(timeout: 10))
+        
+        likeButton.tap()
         
         sleep(2)
-        cellToLike.buttons["likeButton"].tap()
-        
-        sleep(2)
-        cellToLike.tap()
+        likeButton.tap()
         
         sleep(3)
+        cellToLike.tap()
+        
         let image = app.scrollViews.images.element(boundBy: 0)
+        XCTAssertTrue(image.waitForExistence(timeout: 10))
+        
         image.pinch(withScale: 3, velocity: 1)
         image.pinch(withScale: 0.5, velocity: -1)
         
-        let backButton = app.buttons["backButton"]
+        let backButton = app.buttons[AccessibilityIds.backButton]
         backButton.tap()
     }
     
@@ -82,10 +88,10 @@ final class ImageFeedUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts[fullName].exists)
         XCTAssertTrue(app.staticTexts[userName].exists)
         
-        app.buttons["logoutButton"].tap()
+        app.buttons[AccessibilityIds.logoutButton].tap()
         
         app.alerts["Пока, пока!"].scrollViews.otherElements.buttons["Да"].tap()
         
-        XCTAssertTrue(app.otherElements["authViewController"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.otherElements[AccessibilityIds.authViewController].waitForExistence(timeout: 5))
     }
 }

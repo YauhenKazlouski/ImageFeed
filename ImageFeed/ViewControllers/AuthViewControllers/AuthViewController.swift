@@ -29,7 +29,7 @@ final class AuthViewController: UIViewController {
         button.layer.cornerRadius = 16
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
-        button.accessibilityIdentifier = "Authenticate"
+        button.accessibilityIdentifier = AccessibilityIds.loginButton
         return button
     }()
     
@@ -37,7 +37,7 @@ final class AuthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.accessibilityIdentifier = "authViewController"
+        view.accessibilityIdentifier = AccessibilityIds.authViewController
         setupView()
     }
     

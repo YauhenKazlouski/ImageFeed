@@ -25,7 +25,7 @@ final class ImagesListCell: UITableViewCell {
         let button = UIButton()
         button.isHidden = true
         button.addTarget(nil, action: #selector(likeButtonClicked), for: .touchUpInside)
-        button.accessibilityIdentifier = "likeButton"
+        button.accessibilityIdentifier = AccessibilityIds.likeButton
         return button
     }()
     
