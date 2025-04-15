@@ -32,11 +32,7 @@ final class SplashViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if let token = oauth2TokenStorage.token {
-            fetchProfile(token)
-        } else {
-            showAuthViewController()
-        }
+        checkAuthStatusAndProceed()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,6 +51,14 @@ final class SplashViewController: UIViewController {
         view.addSubview(splashImageView)
         
         setConstraints()
+    }
+    
+    private func checkAuthStatusAndProceed() {
+        if let token = oauth2TokenStorage.token {
+            fetchProfile(token)
+        } else {
+            showAuthViewController()
+        }
     }
     
     private func switchToTabBarController() {
@@ -107,13 +111,6 @@ final class SplashViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
-}
-
-// MARK: - AuthViewControllerDelegate
-extension SplashViewController: AuthViewControllerDelegate {
-    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        dismiss(animated: true)
-    }
     
     private func fetchOAuthToken(_ code: String) {
         oauth2Service.fetchOAuthToken(code) { [weak self] result in
@@ -134,7 +131,14 @@ extension SplashViewController: AuthViewControllerDelegate {
     }
 }
 
-//MARK: - setConstraints
+// MARK: - AuthViewControllerDelegate
+extension SplashViewController: AuthViewControllerDelegate {
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
+        dismiss(animated: true)
+    }
+}
+
+//MARK: - Constraints
 extension SplashViewController {
     private func setConstraints() {
         NSLayoutConstraint.activate([

@@ -25,6 +25,7 @@ final class ImagesListCell: UITableViewCell {
         let button = UIButton()
         button.isHidden = true
         button.addTarget(nil, action: #selector(likeButtonClicked), for: .touchUpInside)
+        button.accessibilityIdentifier = AccessibilityIds.likeButton
         return button
     }()
     
@@ -36,7 +37,7 @@ final class ImagesListCell: UITableViewCell {
         return label
     }()
     
-    // MARK: - Lifecycle
+// MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
@@ -53,24 +54,7 @@ final class ImagesListCell: UITableViewCell {
         cellImage.image = nil
     }
     
-    // MARK: - Private functions
-    private func setupView() {
-        [cellImage, likeButton, dateLabel].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview($0)
-        }
-        
-        setConstraints()
-        
-        backgroundColor = .ypBlack
-        selectionStyle = .none
-    }
-    
-    @objc private func likeButtonClicked() {
-        delegate?.imageListCellDidTapLike(self)
-    }
-    
-    // MARK: - Public functions
+// MARK: - Public methods
     func configure(with photo: Photo, using dateFormatter: DateFormatter) {
         cellImage.contentMode = .center
         dateLabel.text = photo.createAt.map { dateFormatter.string(from: $0) } ?? ""
@@ -100,9 +84,27 @@ final class ImagesListCell: UITableViewCell {
         let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
         likeButton.setImage(likeImage, for: .normal)
     }
+    
+// MARK: - Private methods
+    private func setupView() {
+        [cellImage, likeButton, dateLabel].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            contentView.addSubview($0)
+        }
+        
+        setConstraints()
+        
+        backgroundColor = .ypBlack
+        selectionStyle = .none
+    }
+    
+//MARK: - Actions
+    @objc private func likeButtonClicked() {
+        delegate?.imageListCellDidTapLike(self)
+    }
 }
 
-//MARK: - setConstraints
+//MARK: - Constraints
 extension ImagesListCell {
     private func setConstraints() {
         NSLayoutConstraint.activate([

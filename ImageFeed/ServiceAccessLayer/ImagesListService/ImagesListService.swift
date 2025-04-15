@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ImagesListService {
+final class ImagesListService: ImagesListServiceProtocol {
     static let shared = ImagesListService()
     private init() {}
     

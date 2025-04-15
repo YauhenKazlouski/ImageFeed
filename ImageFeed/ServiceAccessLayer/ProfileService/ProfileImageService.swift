@@ -7,12 +7,12 @@
 
 import Foundation
 
-final class ProfileImageService {
+final class ProfileImageService: ProfileImageServiceProtocol {
     static let shared = ProfileImageService()
     private init() {}
     
     private let tokenStorage = OAuth2TokenStorage.shared
-    private(set) var avatarURL: String?
+    var avatarURL: String?
     private var isFetching: Bool = false
     private var task: URLSessionTask?
     static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
